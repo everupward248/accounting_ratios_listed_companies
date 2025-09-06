@@ -1,0 +1,5 @@
+#ignore virtual environment
+.venv/
+src/__pycache__/
+src/logs/
+shared_log.log
