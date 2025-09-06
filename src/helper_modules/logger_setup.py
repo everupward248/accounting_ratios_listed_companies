@@ -1,7 +1,5 @@
 import logging
 
-
-
 def get_logger(name: str=__name__) -> logging.Logger:
     """
     used to create custom logs for each module
@@ -12,7 +10,7 @@ def get_logger(name: str=__name__) -> logging.Logger:
 
     # prevent duplicate handlers
     if not logger.handlers:
-        handler = logging.FileHandler(f"logs/{name}.log")
+        handler = logging.FileHandler(f"logs/{name}.log", mode="w")
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s - %(lineno)d")
         handler.setFormatter(formatter)
         logger.addHandler(handler)
