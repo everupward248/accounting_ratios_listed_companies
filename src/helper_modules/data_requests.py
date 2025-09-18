@@ -64,7 +64,7 @@ def get_ticker() -> str:
     while True:
         ticker = input("Please provide a valid, legally registered company name: ")
 
-        company_ticker = ticker.strip()
+        company_ticker = ticker.upper().strip()
         parameters = {
             "query": company_ticker,
             "apikey": API_KEY
@@ -99,8 +99,45 @@ def get_ticker() -> str:
             shared_logger.warning(f"response request has failed, status code: {response.status_code}")
             print(e)
 
-def get_financials():
-    ...
+def get_bs(ticker):
+    """
+    returns the balance sheet of the company specified
+
+    """
+    while True:
+        limit = int(input("For how many annual periods do you want the balance sheet(s): ").strip())
+        if 5 < limit or limit < 0:
+            print("Maximum periods is 5. Please provide an integer value between 1 and 5\n")
+            continue
+        else:
+            break
+
+    parameters = {
+        "symbol": ticker, 
+        "period": "annual",
+        "limit": limit,
+        "apikey": API_KEY
+    }
+
+    try:
+        response = requests.get(f"{BASE_URL}/balance-sheet-statement", params=parameters)
+
+        if response.status_code == 200:
+            logger.info(f"Request successful, status code: {response.status_code} for request at url: {response.url}")
+            shared_logger.info(f"Request successful for request at url: {response.url}")
+            response = response.json()
+            
+        else:
+            response.raise_for_status()
+        return response
+    except requests.HTTPError:
+        logger.warning(requests.HTTPError)
+        shared_logger.warning(requests.HTTPError)
+    except Exception as e:
+        logger.warning(f"response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        print(e)
+
 
 
 if __name__ == "__main__":
