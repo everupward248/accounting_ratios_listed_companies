@@ -99,15 +99,15 @@ def get_ticker() -> str:
             shared_logger.warning(f"response request has failed, status code: {response.status_code}")
             print(e)
 
-def get_bs(ticker):
+def get_bs(ticker: str) -> pd.DataFrame | None:
     """
     returns the balance sheet of the company specified
 
     """
     while True:
         limit = int(input("For how many annual periods do you want the balance sheet(s): ").strip())
-        if 5 < limit or limit < 0:
-            print("Maximum periods is 5. Please provide an integer value between 1 and 5\n")
+        if 5 < limit or limit <= 0:
+            print("Maximum periods is 5. Please provide an integer value between 1 and 5")
             continue
         else:
             break
@@ -129,7 +129,91 @@ def get_bs(ticker):
             
         else:
             response.raise_for_status()
-        return response
+        
+        df = pd.DataFrame(response)
+        return df
+    except requests.HTTPError:
+        logger.warning(requests.HTTPError)
+        shared_logger.warning(requests.HTTPError)
+    except Exception as e:
+        logger.warning(f"response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        print(e)
+
+def get_is(ticker: str) -> pd.DataFrame | None:
+    """
+    returns the income statement of the company specified
+
+    """
+    while True:
+        limit = int(input("For how many annual periods do you want the income statement(s): ").strip())
+        if 5 < limit or limit <= 0:
+            print("Maximum periods is 5. Please provide an integer value between 1 and 5")
+            continue
+        else:
+            break
+
+    parameters = {
+        "symbol": ticker, 
+        "period": "annual",
+        "limit": limit,
+        "apikey": API_KEY
+    }
+
+    try:
+        response = requests.get(f"{BASE_URL}/income-statement", params=parameters)
+
+        if response.status_code == 200:
+            logger.info(f"Request successful, status code: {response.status_code} for request at url: {response.url}")
+            shared_logger.info(f"Request successful for request at url: {response.url}")
+            response = response.json()
+            
+        else:
+            response.raise_for_status()
+        
+        df = pd.DataFrame(response)
+        return df
+    except requests.HTTPError:
+        logger.warning(requests.HTTPError)
+        shared_logger.warning(requests.HTTPError)
+    except Exception as e:
+        logger.warning(f"response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        print(e)
+
+def get_cf(ticker: str) -> pd.DataFrame | None:
+    """
+    returns the cash flows of the company specified
+
+    """
+    while True:
+        limit = int(input("For how many annual periods do you want the cash flow(s): ").strip())
+        if 5 < limit or limit <= 0:
+            print("Maximum periods is 5. Please provide an integer value between 1 and 5")
+            continue
+        else:
+            break
+
+    parameters = {
+        "symbol": ticker, 
+        "period": "annual",
+        "limit": limit,
+        "apikey": API_KEY
+    }
+
+    try:
+        response = requests.get(f"{BASE_URL}/cash-flow-statement", params=parameters)
+
+        if response.status_code == 200:
+            logger.info(f"Request successful, status code: {response.status_code} for request at url: {response.url}")
+            shared_logger.info(f"Request successful for request at url: {response.url}")
+            response = response.json()
+            
+        else:
+            response.raise_for_status()
+        
+        df = pd.DataFrame(response)
+        return df
     except requests.HTTPError:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
