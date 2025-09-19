@@ -1,6 +1,7 @@
 from src.helper_modules.logger_setup import get_logger, shared_logger
 from src.helper_modules import accounting_ratios as ar
 from src.helper_modules import data_requests as dr
+from tabulate import tabulate
 import argparse
 
 
@@ -16,11 +17,14 @@ def main() -> None:
         print(dr.get_name())
 
     if args.balance_sheet:
-        print(dr.get_bs(args.balance_sheet))
+        if (df := dr.get_bs(args.balance_sheet)) is not None and not df.empty: 
+            print(tabulate(df, tablefmt="grid"))
     elif args.income_statement:
-        print(dr.get_is(args.income_statement))
+        if (df := dr.get_is(args.income_statement)) is not None and not df.empty: 
+            print(tabulate(df, tablefmt="grid"))
     elif args.cash_flows:
-        print(dr.get_cf(args.cash_flows))
+         if (df := dr.get_cf(args.cash_flows)) is not None and not df.empty: 
+            print(tabulate(df, tablefmt="grid"))
     
 
 def cli() -> argparse.ArgumentParser:

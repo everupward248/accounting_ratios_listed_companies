@@ -131,7 +131,8 @@ def get_bs(ticker: str) -> pd.DataFrame | None:
             response.raise_for_status()
         
         df = pd.DataFrame(response)
-        return df
+        df_transposed = df.transpose()
+        return df_transposed
     except requests.HTTPError:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
@@ -172,7 +173,8 @@ def get_is(ticker: str) -> pd.DataFrame | None:
             response.raise_for_status()
         
         df = pd.DataFrame(response)
-        return df
+        df_transposed = df.transpose()
+        return df_transposed
     except requests.HTTPError:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
@@ -213,7 +215,8 @@ def get_cf(ticker: str) -> pd.DataFrame | None:
             response.raise_for_status()
         
         df = pd.DataFrame(response)
-        return df
+        df_transposed = df.transpose()
+        return df_transposed
     except requests.HTTPError:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
