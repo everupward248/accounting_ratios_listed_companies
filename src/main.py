@@ -45,13 +45,24 @@ def main() -> None:
             print("There was an issue rendering your request. Please try again.")
             logger.warning(f"Function returned: {df}")
             shared_logger.warning(f"Function returned: {df}")
-    
+            
+    # ratios
+    if args.ratios:
+        ticker = input("Please provide a valid company ticker: ").strip()
+
+        for ratio in args.ratios:
+            if "liquidity" in args.ratios:
+                if (bs := dr.get_bs(ticker)) is not None:
+                    print(bs.loc["totalCurrentAssets"])
+               
+
 
 def cli() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="This program is a CLI tool which allows users to fetch the accounting ratios of listed companies when provided the ticker.")
     parser.add_argument("-bs", "--balance_sheet", type=str, help="Use this flag to obtain the balance sheet data for a given listed company. Provide the company ticker.")
     parser.add_argument("-is", "--income_statement", type=str, help="Use this flag to obtain the income statement data for a given listed company. Provide the company ticker.")
     parser.add_argument("-cf", "--cash_flows", type=str, help="Use this flag to obtain the cash flows data for a given listed company. Provide the company ticker.")
+    parser.add_argument("-r", "--ratios", type=str, nargs="+", choices=["liquidity", "profitability", "gearing", "valuation", "all"], help="Use this flag to obtain the financial ratios of a selected listed company. Provide a choice which which category of ratios or all.")
     parser.add_argument("-nt", "--name_ticker", action="store_true", help="Omit this flag for tickers and include for the legally registered company name.")
     parser.add_argument("-gnt", "--get_name_ticker", type=str, choices=["name", "ticker"], help="Use this flag to obtain the legally registered company name or ticker per the ticker and company name respectively.")
     return parser
