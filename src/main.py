@@ -17,30 +17,33 @@ def main() -> None:
     elif args.get_name_ticker == "ticker":
         print(dr.get_name())
 
-    # .tolist() used as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
+    # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
     if args.balance_sheet:
         if (df := dr.get_bs(args.balance_sheet)) is not None and not df.empty:
-            print(tabulate(df.reset_index().values.tolist(), tablefmt="grid"))
-            logger.info(f"The balance sheet data for the requested company has been successfully returned to the user: {df[0]["symbol"]}")
-            shared_logger.info(f"The balance sheet data for the requested company has been successfully returned to the user: {df[0]["symbol"]}")
+            df_transposed = df.transpose()
+            print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
+            logger.info(f"The balance sheet data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
+            shared_logger.info(f"The balance sheet data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
         else:
             print("There was an issue rendering your request. Please try again.")
             logger.warning(f"Function returned: {df}")
             shared_logger.warning(f"Function returned: {df}")
     elif args.income_statement:
         if (df := dr.get_is(args.income_statement)) is not None and not df.empty: 
-            print(tabulate(df.reset_index().values.tolist(), tablefmt="grid"))
-            logger.info(f"The income statement data for the requested company has been successfully returned to the user: {df[0]["symbol"]}")
-            shared_logger.info(f"The income statement data for the requested company has been successfully returned to the user: {df[0]["symbol"]}")
+            df_transposed = df.transpose()
+            print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
+            logger.info(f"The income statement data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
+            shared_logger.info(f"The income statement data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
         else:
             print("There was an issue rendering your request. Please try again.")
             logger.warning(f"Function returned: {df}")
             shared_logger.warning(f"Function returned: {df}")
     elif args.cash_flows:
         if (df := dr.get_cf(args.cash_flows)) is not None and not df.empty: 
-            print(tabulate(df.reset_index().values.tolist(), tablefmt="grid"))
-            logger.info(f"The cash flows data for the requested company has been successfully returned to the user: {df[0]["symbol"]}")
-            shared_logger.info(f"The cash flows data for the requested company has been successfully returned to the user: {df[0]["symbol"]}")
+            df_transposed = df.transpose()
+            print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
+            logger.info(f"The cash flows data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
+            shared_logger.info(f"The cash flows data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
         else:
             print("There was an issue rendering your request. Please try again.")
             logger.warning(f"Function returned: {df}")

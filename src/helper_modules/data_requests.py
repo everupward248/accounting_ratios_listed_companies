@@ -36,8 +36,7 @@ def get_name():
                 shared_logger.info(f"Request successful for request at url: {response.url}")
                 response = response.json()
                 
-                if not response:
-                    print("Invalid ticker provided. Please ensure this is the company's valid ticker.")
+                if not response: 
                     continue
                 # data returned is for all exchanges, obtain the ticker for the US exchange
                 for x in response:
@@ -131,8 +130,7 @@ def get_bs(ticker: str) -> pd.DataFrame | None:
             response.raise_for_status()
         
         df = pd.DataFrame(response)
-        df_transposed = df.transpose()
-        return df_transposed
+        return df
     except requests.HTTPError:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
@@ -173,8 +171,7 @@ def get_is(ticker: str) -> pd.DataFrame | None:
             response.raise_for_status()
         
         df = pd.DataFrame(response)
-        df_transposed = df.transpose()
-        return df_transposed
+        return df
     except requests.HTTPError:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
@@ -215,8 +212,7 @@ def get_cf(ticker: str) -> pd.DataFrame | None:
             response.raise_for_status()
         
         df = pd.DataFrame(response)
-        df_transposed = df.transpose()
-        return df_transposed
+        return df
     except requests.HTTPError:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
