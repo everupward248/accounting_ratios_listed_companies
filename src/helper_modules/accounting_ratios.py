@@ -18,6 +18,13 @@ def quick_ratio(current_assets: float, inventory: float, current_liabilities: fl
     """
     return (current_assets - inventory) / current_liabilities
 
+def cash_ratio(cash: float, current_liabilities: float) -> float:
+    """
+    measures the company's ability to pay of its current liabilities using only its cash and cash equivalents
+
+    """
+    return cash / current_liabilities
+
 # profitability
 def gross_profit_margin():
     ...

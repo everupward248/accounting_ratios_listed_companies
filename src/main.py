@@ -55,8 +55,30 @@ def main() -> None:
 
         for ratio in args.ratios:
             if "liquidity" in args.ratios:
+                # obtain the balance sheet data for the selected company and then extract the FSLI's which will be used in the liquidity ratio computations
                 if (bs := dr.get_bs(ticker)) is not None:
-                    print(bs.loc["totalCurrentAssets"])
+                    # create a copy of the balance sheet dataframe otherwise .apply() will give a warning
+                    ratio_data = bs.copy(deep=True)
+                    print(ratio_data)
+                    
+                    # apply the liquidity ratios to the balance sheet data
+                    ratio_data["current_ratio"] = ratio_data.apply(
+                        lambda x: round(ar.current_ratio(x["totalCurrentAssets"], x["totalCurrentLiabilities"]), 3), axis=1
+                        )
+                    ratio_data["quick_ratio"] = ratio_data.apply(
+                        lambda x: round(ar.quick_ratio(x["totalCurrentAssets"], x["inventory"], x["totalCurrentLiabilities"]), 3), axis=1
+                        )
+                    ratio_data["cash_ratio"] = ratio_data.apply(
+                        lambda x: round(ar.cash_ratio(x["cashAndCashEquivalents"], x["totalCurrentLiabilities"]), 3), axis=1
+                        )
+                    
+                    # create a list of the ratio columns and to pass as headers to tabulate
+                    cols = ["fiscalYear", "date", "current_ratio", "quick_ratio", "cash_ratio"]
+                    liquidity_ratios = ratio_data[cols]
+                    liquidity_ratios_list = liquidity_ratios.values.tolist()
+
+                    print(tabulate(liquidity_ratios_list, headers=cols, tablefmt="grid"))
+                    
                
 
 

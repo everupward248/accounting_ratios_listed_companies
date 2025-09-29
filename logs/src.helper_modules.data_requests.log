@@ -1,1 +1,1 @@
-2025-09-28 18:07:17,120 - src.helper_modules.data_requests - INFO - Request successful, status code: 200 for request at url: https://financialmodelingprep.com/stable/cash-flow-statement?symbol=NVDA&period=annual&limit=2&apikey=LawRfh9kTAnttlB1oG5eUdOQMrbMOmxT - 207
+2025-09-28 19:13:02,004 - src.helper_modules.data_requests - INFO - Request successful, status code: 200 for request at url: https://financialmodelingprep.com/stable/balance-sheet-statement?symbol=AAPL&period=annual&limit=5&apikey=LawRfh9kTAnttlB1oG5eUdOQMrbMOmxT - 125
