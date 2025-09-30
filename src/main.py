@@ -59,7 +59,6 @@ def main() -> None:
                 if (bs := dr.get_bs(ticker)) is not None:
                     # create a copy of the balance sheet dataframe otherwise .apply() will give a warning
                     ratio_data = bs.copy(deep=True)
-                    print(ratio_data)
                     
                     # apply the liquidity ratios to the balance sheet data
                     ratio_data["current_ratio"] = ratio_data.apply(
@@ -78,6 +77,29 @@ def main() -> None:
                     liquidity_ratios_list = liquidity_ratios.values.tolist()
 
                     print(tabulate(liquidity_ratios_list, headers=cols, tablefmt="grid"))
+            elif "profitability" in args.ratios:
+                if (inc_s := dr.get_is(ticker)) is not None and (bs := dr.get_bs(ticker)) is not None:
+                    # create a copy of the balance sheet dataframe otherwise .apply() will give a warning
+                    is_data = inc_s.copy(deep=True)
+                    # apply the profitability ratios to the income statement data
+                    is_data["gross_profit_margin"] = is_data.apply(
+                        lambda x: round(ar.gross_profit_margin(x["grossProfit"], x["revenue"]), 3), axis=1
+                        )
+                    is_data["operating_profit_margin"] = is_data.apply(
+                        lambda x: round(ar.operating_profit_margin(x["operatingIncome"], x["revenue"]), 3), axis=1
+                        )
+                    is_data["net_profit_margin"] = is_data.apply(
+                        lambda x: round(ar.operating_profit_margin(x["netIncome"], x["revenue"]), 3), axis=1
+                        )
+                    
+                    print(bs)
+                    
+                    # create a list of the ratio columns and to pass as headers to tabulate
+                    cols = ["fiscalYear", "date", "gross_profit_margin", "operating_profit_margin", "net_profit_margin"]
+                    profitability_ratios = is_data[cols]
+                    profitability_ratios_list = profitability_ratios.values.tolist()
+
+                    print(tabulate(profitability_ratios_list, headers=cols, tablefmt="grid"))
                     
                
 

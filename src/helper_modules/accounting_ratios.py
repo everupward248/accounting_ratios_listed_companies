@@ -26,18 +26,32 @@ def cash_ratio(cash: float, current_liabilities: float) -> float:
     return cash / current_liabilities
 
 # profitability
-def gross_profit_margin():
-    ...
+def gross_profit_margin(gross_profit: float, revenue: float) -> float:
+    """
+    this is a measure of how well a business converts its sales into profits before paying overheads, taxes, and financing costs
 
-def operating_profit_margin():
-    ...
+    """
+    return gross_profit / revenue
 
-def net_profit_margin():
-    ...
+def operating_profit_margin(operating_profit: float, revenue: float) -> float:
+    """
+    this is a measure of how well the business profits from its core business operations after deducting direct costs and operational expenses before taxes and finance costs
+    
+    """
+    return operating_profit / revenue 
+
+def net_profit_margin(net_profit: float, revenue: float) -> float:
+    """
+    this is the 'bottom line' after deducting all expenses
+    how much each dollar of revenue is retained as profit for shareholders
+
+    """
+    return net_profit / revenue
 
 def roce():
     """
-    return on capital employed - 
+    return on capital employed - a measure of how efficiently a company generates profit from the long-term capital invested
+    capital employed - equity + non-current assets - the total long-term funding used by the business
 
     """
 
