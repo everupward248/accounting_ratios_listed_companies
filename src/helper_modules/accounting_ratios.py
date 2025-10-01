@@ -48,12 +48,19 @@ def net_profit_margin(net_profit: float, revenue: float) -> float:
     """
     return net_profit / revenue
 
-def roce():
+def roce(ebit: float, capital_employed: float) -> float:
     """
     return on capital employed - a measure of how efficiently a company generates profit from the long-term capital invested
-    capital employed - equity + non-current assets - the total long-term funding used by the business
 
     """
+    return ebit / capital_employed
+
+def capital_employed(equity: float, non_current_liabilities: float) -> float:
+    """
+    capital employed - equity + non-current assets - the total long-term funding used by the business
+    
+    """
+    return equity + non_current_liabilities
 
 def cash_flow_margin():
     ...

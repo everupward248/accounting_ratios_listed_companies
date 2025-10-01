@@ -4,6 +4,7 @@ from src.helper_modules import data_requests as dr
 from tabulate import tabulate
 import argparse
 import pandas as pd
+import sys
 
 
 def main() -> None:
@@ -19,7 +20,8 @@ def main() -> None:
 
     # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
     if args.balance_sheet:
-        if (df := dr.get_bs(args.balance_sheet)) is not None and not df.empty:
+        limit = dr.get_period()
+        if (df := dr.get_bs(args.balance_sheet, limit)) is not None and not df.empty:
             df_transposed = df.transpose()
             print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
             logger.info(f"The balance sheet data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
@@ -29,7 +31,8 @@ def main() -> None:
             logger.warning(f"Function returned: {df}")
             shared_logger.warning(f"Function returned: {df}")
     elif args.income_statement:
-        if (df := dr.get_is(args.income_statement)) is not None and not df.empty: 
+        limit = dr.get_period()
+        if (df := dr.get_is(args.income_statement, limit)) is not None and not df.empty: 
             df_transposed = df.transpose()
             print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
             logger.info(f"The income statement data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
@@ -39,7 +42,8 @@ def main() -> None:
             logger.warning(f"Function returned: {df}")
             shared_logger.warning(f"Function returned: {df}")
     elif args.cash_flows:
-        if (df := dr.get_cf(args.cash_flows)) is not None and not df.empty: 
+        limit = dr.get_period()
+        if (df := dr.get_cf(args.cash_flows, limit)) is not None and not df.empty: 
             df_transposed = df.transpose()
             print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
             logger.info(f"The cash flows data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
@@ -56,7 +60,8 @@ def main() -> None:
         for ratio in args.ratios:
             if "liquidity" in args.ratios:
                 # obtain the balance sheet data for the selected company and then extract the FSLI's which will be used in the liquidity ratio computations
-                if (bs := dr.get_bs(ticker)) is not None:
+                limit = dr.get_period()
+                if (bs := dr.get_bs(ticker, limit)) is not None:
                     # create a copy of the balance sheet dataframe otherwise .apply() will give a warning
                     ratio_data = bs.copy(deep=True)
                     
@@ -77,30 +82,42 @@ def main() -> None:
                     liquidity_ratios_list = liquidity_ratios.values.tolist()
 
                     print(tabulate(liquidity_ratios_list, headers=cols, tablefmt="grid"))
+                else:
+                    sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
             elif "profitability" in args.ratios:
-                if (inc_s := dr.get_is(ticker)) is not None and (bs := dr.get_bs(ticker)) is not None:
+                limit = dr.get_period()
+                if (inc_s := dr.get_is(ticker, limit)) is not None and (bs := dr.get_bs(ticker, limit)) is not None:
                     # create a copy of the balance sheet dataframe otherwise .apply() will give a warning
                     is_data = inc_s.copy(deep=True)
+                    bs_data = bs.copy(deep=True)
+                    # merge the financial statements on fiscal year
+                    merged_df = pd.merge(is_data, bs_data, on="fiscalYear", how="inner", suffixes=("", "_df2"))
+                    print(merged_df)
                     # apply the profitability ratios to the income statement data
-                    is_data["gross_profit_margin"] = is_data.apply(
+                    merged_df["gross_profit_margin"] = merged_df.apply(
                         lambda x: round(ar.gross_profit_margin(x["grossProfit"], x["revenue"]), 3), axis=1
                         )
-                    is_data["operating_profit_margin"] = is_data.apply(
+                    merged_df["operating_profit_margin"] = merged_df.apply(
                         lambda x: round(ar.operating_profit_margin(x["operatingIncome"], x["revenue"]), 3), axis=1
                         )
-                    is_data["net_profit_margin"] = is_data.apply(
+                    merged_df["net_profit_margin"] = merged_df.apply(
                         lambda x: round(ar.operating_profit_margin(x["netIncome"], x["revenue"]), 3), axis=1
                         )
+                    merged_df["capital_employed"] = merged_df.apply(
+                        lambda x: round(ar.capital_employed(x["totalStockholdersEquity"], x["longTermDebt"] + x["capitalLeaseObligations"]), 3), axis=1
+                        )
+                    merged_df["return_on_capital_employed"] = merged_df.apply(
+                        lambda x: round(ar.roce(x["ebit"], x["capital_employed"]), 3), axis=1
+                        )
                     
-                    print(bs)
                     
                     # create a list of the ratio columns and to pass as headers to tabulate
-                    cols = ["fiscalYear", "date", "gross_profit_margin", "operating_profit_margin", "net_profit_margin"]
-                    profitability_ratios = is_data[cols]
+                    cols = ["fiscalYear", "date", "gross_profit_margin", "operating_profit_margin", "net_profit_margin", "return_on_capital_employed"]
+                    profitability_ratios = merged_df[cols]
                     profitability_ratios_list = profitability_ratios.values.tolist()
 
                     print(tabulate(profitability_ratios_list, headers=cols, tablefmt="grid"))
-                    
+                    print(merged_df[["ebit", "capital_employed"]])
                
 
 

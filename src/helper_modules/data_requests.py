@@ -14,6 +14,15 @@ logger = get_logger(__name__)
 def main():
     print(get_name())
 
+def get_period() -> int:
+     while True:
+        limit = int(input("For how many annual periods do you want the financial statement(s): ").strip())
+        if 5 < limit or limit <= 0:
+            print("Maximum periods is 5. Please provide an integer value between 1 and 5")
+            continue
+        else:
+            return limit
+
 def get_name():
     """
     returns the company name for the ticker name provided
@@ -98,18 +107,11 @@ def get_ticker() -> str:
             shared_logger.warning(f"response request has failed, status code: {response.status_code}")
             print(e)
 
-def get_bs(ticker: str) -> pd.DataFrame | None:
+def get_bs(ticker: str, limit: int) -> pd.DataFrame | None:
     """
     returns the balance sheet of the company specified
 
     """
-    while True:
-        limit = int(input("For how many annual periods do you want the balance sheet(s): ").strip())
-        if 5 < limit or limit <= 0:
-            print("Maximum periods is 5. Please provide an integer value between 1 and 5")
-            continue
-        else:
-            break
 
     parameters = {
         "symbol": ticker, 
@@ -139,18 +141,11 @@ def get_bs(ticker: str) -> pd.DataFrame | None:
         shared_logger.warning(f"response request has failed, status code: {response.status_code}")
         print(e)
 
-def get_is(ticker: str) -> pd.DataFrame | None:
+def get_is(ticker: str, limit: int) -> pd.DataFrame | None:
     """
     returns the income statement of the company specified
 
     """
-    while True:
-        limit = int(input("For how many annual periods do you want the income statement(s): ").strip())
-        if 5 < limit or limit <= 0:
-            print("Maximum periods is 5. Please provide an integer value between 1 and 5")
-            continue
-        else:
-            break
 
     parameters = {
         "symbol": ticker, 
@@ -180,18 +175,11 @@ def get_is(ticker: str) -> pd.DataFrame | None:
         shared_logger.warning(f"response request has failed, status code: {response.status_code}")
         print(e)
 
-def get_cf(ticker: str) -> pd.DataFrame | None:
+def get_cf(ticker: str, limit: int) -> pd.DataFrame | None:
     """
     returns the cash flows of the company specified
 
     """
-    while True:
-        limit = int(input("For how many annual periods do you want the cash flow(s): ").strip())
-        if 5 < limit or limit <= 0:
-            print("Maximum periods is 5. Please provide an integer value between 1 and 5")
-            continue
-        else:
-            break
 
     parameters = {
         "symbol": ticker, 
