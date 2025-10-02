@@ -55,12 +55,16 @@ def roce(ebit: float, capital_employed: float) -> float:
     """
     return ebit / capital_employed
 
-def capital_employed(equity: float, non_current_liabilities: float) -> float:
+def capital_employed(equity: float, non_current_liabilities: float, type: int) -> float:
     """
     capital employed - equity + non-current assets - the total long-term funding used by the business
+    can also be total assets less current liabilities but the actual capital structure is prefered from an investor perspective
     
     """
-    return equity + non_current_liabilities
+    if type == 1:
+        return equity - non_current_liabilities
+    else:   
+        return equity + non_current_liabilities
 
 def cash_flow_margin():
     ...

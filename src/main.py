@@ -82,7 +82,12 @@ def main() -> None:
                     liquidity_ratios_list = liquidity_ratios.values.tolist()
 
                     print(tabulate(liquidity_ratios_list, headers=cols, tablefmt="grid"))
+
+                    logger.info(f"The liquidity ratios have been provided for {ratio_data["symbol"][0]}")
+                    shared_logger.info(f"The liquidity ratios have been provided for {ratio_data["symbol"][0]}")
                 else:
+                    logger.warning(f"The liquidity ratios failed, ensure valid ticker")
+                    shared_logger.warning(f"The liquidity ratios failed, ensure valid ticker")
                     sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
             elif "profitability" in args.ratios:
                 limit = dr.get_period()
@@ -92,7 +97,7 @@ def main() -> None:
                     bs_data = bs.copy(deep=True)
                     # merge the financial statements on fiscal year
                     merged_df = pd.merge(is_data, bs_data, on="fiscalYear", how="inner", suffixes=("", "_df2"))
-                    print(merged_df)
+
                     # apply the profitability ratios to the income statement data
                     merged_df["gross_profit_margin"] = merged_df.apply(
                         lambda x: round(ar.gross_profit_margin(x["grossProfit"], x["revenue"]), 3), axis=1
@@ -103,11 +108,33 @@ def main() -> None:
                     merged_df["net_profit_margin"] = merged_df.apply(
                         lambda x: round(ar.operating_profit_margin(x["netIncome"], x["revenue"]), 3), axis=1
                         )
-                    merged_df["capital_employed"] = merged_df.apply(
-                        lambda x: round(ar.capital_employed(x["totalStockholdersEquity"], x["longTermDebt"] + x["capitalLeaseObligations"]), 3), axis=1
-                        )
+                    
+                    # user provides an option for the calculation of capital employed to be passed to the roce computation
+                    while True:
+                        try:
+                            capital_employed_type = int(input("select 1 for total assets less current liabilities or select 2 for equity plus non-current liabilities as measure of capital employed? ").strip())
+
+                            if capital_employed_type == 1:
+                                merged_df["capital_employed"] = merged_df.apply(
+                                    lambda x: round(ar.capital_employed(x["totalAssets"], x["totalCurrentLiabilities"], 1), 3), axis=1
+                                    )
+                                break
+                            elif capital_employed_type == 2:
+                                merged_df["capital_employed"] = merged_df.apply(
+                                    lambda x: round(ar.capital_employed(x["totalStockholdersEquity"], x["longTermDebt"] + x["capitalLeaseObligations"], 2), 3), axis=1
+                                    )
+                                break
+                            else:
+                                print("must select a number 1 or 2")
+                                continue
+                        except EOFError:
+                            sys.exit("program quit...")
+                        except Exception as e:
+                            print(e)
+                            continue
+
                     merged_df["return_on_capital_employed"] = merged_df.apply(
-                        lambda x: round(ar.roce(x["ebit"], x["capital_employed"]), 3), axis=1
+                        lambda x: round(ar.roce(x["operatingIncome"], x["capital_employed"]), 3), axis=1
                         )
                     
                     
@@ -117,7 +144,14 @@ def main() -> None:
                     profitability_ratios_list = profitability_ratios.values.tolist()
 
                     print(tabulate(profitability_ratios_list, headers=cols, tablefmt="grid"))
+                    logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
+                    shared_logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
+
                     print(merged_df[["ebit", "capital_employed"]])
+                else:
+                    logger.warning(f"The profitability ratios failed, ensure valid ticker")
+                    shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
+                    sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
                
 
 
