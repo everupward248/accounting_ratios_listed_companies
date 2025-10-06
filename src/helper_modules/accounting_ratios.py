@@ -66,11 +66,26 @@ def capital_employed(equity: float, non_current_liabilities: float, type: int) -
     else:   
         return equity + non_current_liabilities
 
-def cash_flow_margin():
-    ...
+def operating_cash_flow_margin(operating_cash_flow: float, revenue: float) -> float:
+    """
+    cash flow margin is a measure of how efficiently a business converts its sales into actual cash
+    
+    """
+    return operating_cash_flow / revenue
 
-def return_on_equity():
-    ...
+def free_cash_flow_margin(free_cash_flow: float, revenue: float) -> float:
+    """
+    cash flow margin is a measure of how efficiently a business converts its sales into actual cash
+    
+    """
+    return free_cash_flow / revenue
+
+def return_on_equity(net_income: float, shareholders_equity: float) -> float:
+    """
+    ROE is a measure of how well the company is converting equity financing to profits
+    
+    """
+    return net_income / shareholders_equity
 
 def return_on_assets():
     ...
