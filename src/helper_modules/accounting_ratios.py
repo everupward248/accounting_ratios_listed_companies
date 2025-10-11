@@ -87,12 +87,20 @@ def return_on_equity(net_income: float, shareholders_equity: float) -> float:
     """
     return net_income / shareholders_equity
 
-def return_on_assets():
-    ...
+def return_on_assets(net_income: float, assets: float) -> float:
+    """
+    ROA is a measure of how well the company uses its assets to generate profits
+
+    """
+    return net_income / assets
 
 # gearing
-def debt_equity_ratio():
-    ...
+def debt_equity_ratio(total_liabilities: float, total_shareholder_equity: float) -> float:
+    """
+    measures how leveraged a company is, how much of its operations is financed by debt
+
+    """
+    return total_liabilities / total_shareholder_equity
 
 def interest_cover():
     ...

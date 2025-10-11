@@ -150,9 +150,13 @@ def main() -> None:
                 merged_df["return_on_equity"] = merged_df.apply(
                     lambda x: round(ar.return_on_equity(x["netIncome"], x["totalStockholdersEquity"]), 3), axis=1
                     )
+                merged_df["return_on_assets"] = merged_df.apply(
+                    lambda x: round(ar.return_on_assets(x["netIncome"], x["totalAssets"]), 3), axis=1
+                )
+                
                 
                 # create a list of the ratio columns and to pass as headers to tabulate
-                cols = ["fiscalYear", "date", "gross_profit_margin", "operating_profit_margin", "net_profit_margin", "return_on_capital_employed", "operating_cash_flow_margin", "free_cash_flow_margin", "return_on_equity"]
+                cols = ["fiscalYear", "date", "gross_profit_margin", "operating_profit_margin", "net_profit_margin", "return_on_capital_employed", "operating_cash_flow_margin", "free_cash_flow_margin", "return_on_equity", "return_on_assets"]
                 profitability_ratios = merged_df[cols]
                 profitability_ratios_list = profitability_ratios.values.tolist()
 
@@ -160,12 +164,37 @@ def main() -> None:
                 logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
                 shared_logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
 
-                print(merged_df[["ebit", "capital_employed"]])
+                print(merged_df[["netIncome", "totalAssets"]])
             else:
                 logger.warning(f"The profitability ratios failed, ensure valid ticker")
                 shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
                 sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
-            
+        elif "gearing"  in args.ratios:
+            limit = dr.get_period()
+            # obtain the data across all financial statements to compute the ratios
+            if (inc_s := dr.get_is(ticker, limit)) is not None and (bs := dr.get_bs(ticker, limit)) is not None:
+                # create a copy of the balance sheet dataframe otherwise .apply() will give a warning
+                is_data = inc_s.copy(deep=True)
+                bs_data = bs.copy(deep=True)
+                merged_df = pd.merge(is_data, bs_data, on="fiscalYear", how="inner", suffixes=("", "_df2"))
+
+                merged_df["debt_to_equity"] = merged_df.apply(
+                    lambda x: round(ar.debt_equity_ratio(x["totalLiabilities"], x["totalStockholdersEquity"]), 3), axis=1)
+
+
+                # create a list of the ratio columns and to pass as headers to tabulate
+                cols = ["fiscalYear", "date", "debt_to_equity"]
+                gearing_ratios = merged_df[cols]
+                gearing_ratios_list = gearing_ratios.values.tolist()
+
+                print(tabulate(gearing_ratios_list, headers=cols, tablefmt="grid"))
+                logger.info(f"The gearing ratios have been provided for {merged_df["symbol"][0]}")
+                shared_logger.info(f"The gearing ratios have been provided for {merged_df["symbol"][0]}")
+            else:
+                logger.warning(f"The profitability ratios failed, ensure valid ticker")
+                shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
+                sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
+               
 
 
 def cli() -> argparse.ArgumentParser:
