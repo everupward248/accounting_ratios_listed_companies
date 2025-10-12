@@ -173,6 +173,52 @@ def main() -> None:
                 logger.warning(f"The profitability ratios failed, ensure valid ticker")
                 shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
                 sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
+        elif "valuation" in args.ratios:
+            # obtain the data across all financial statements to compute the ratios
+            limit = dr.get_period()
+            if (inc_s := dr.get_is(ticker, limit)) is not None:
+                is_data = inc_s.copy(deep=True)
+                
+                # convert the dates for the search into a list and slice the earliest and lates periods to pass as query parameters into the stock price search
+                dates = list(is_data["date"])
+                from_date = dates[-1]
+                to_date = dates[0]
+
+                # obtain the rows of the stock prices for only the financial statement year end dates
+                if (stock_prices := dr.stock_prices(ticker, from_date, to_date)) is not None:
+                    # initialize a dataframe to extract only the ye dates, 
+                    df = pd.DataFrame(columns=stock_prices.columns)
+
+                    # append only the year date prices
+                    for i in range(len(stock_prices)):
+                        if stock_prices.loc[i]["date"] in dates:
+                            df.loc[i] = stock_prices.loc[i]
+                
+                    stock_price_data = df.copy(deep=True)
+                    # merge the data sets
+                    merged_df = pd.merge(is_data, stock_price_data, on="date", how="inner", suffixes=("", "_df2"))
+
+                    merged_df["p/e_ratio"] = merged_df.apply(lambda x: round(ar.pe_ratio(x["close"], x["eps"]), 3), axis=1)
+                    merged_df["p/e_ratio_diluted"] = merged_df.apply(lambda x: round(ar.pe_ratio(x["close"], x["epsDiluted"]), 3), axis=1)
+
+                    # create a list of the ratio columns and to pass as headers to tabulate
+                    cols = ["fiscalYear", "date", "eps", "epsDiluted", "p/e_ratio", "p/e_ratio_diluted", "close"]
+                    valuation_ratios = merged_df[cols]
+                    valuation_ratios_list = valuation_ratios.values.tolist()
+
+                    print(tabulate(valuation_ratios_list, headers=cols, tablefmt="grid"))
+                    logger.info(f"The valuation ratios have been provided for {merged_df["symbol"][0]}")
+                    shared_logger.info(f"The valuation ratios have been provided for {merged_df["symbol"][0]}")
+                else:
+                    logger.warning(f"The valuation ratios failed, ensure valid ticker")
+                    shared_logger.warning(f"The valuation ratios failed, ensure valid ticker")
+                    sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
+                            
+            else:
+                logger.warning(f"The valuation ratios failed, ensure valid ticker")
+                shared_logger.warning(f"The valuation ratios failed, ensure valid ticker")
+                sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
+
                
 
 

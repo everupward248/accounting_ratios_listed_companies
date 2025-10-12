@@ -133,7 +133,13 @@ def debt_ratio(debt: float, assets: float) -> float:
 
 # valuation
 def eps():
-    ...
-    
-def p_e():
-    ...
+    """
+    the amount of earnings allocated to each share of a company
+    """
+
+def pe_ratio(stock_price: float, eps: float) -> float:
+    """
+    this ratio relates the stock price to the company's earnings, this can allow the investor to determine if the company is under or overvalued
+
+    """
+    return stock_price / eps

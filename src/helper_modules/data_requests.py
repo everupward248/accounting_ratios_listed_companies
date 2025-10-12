@@ -209,7 +209,37 @@ def get_cf(ticker: str, limit: int) -> pd.DataFrame | None:
         shared_logger.warning(f"response request has failed, status code: {response.status_code}")
         print(e)
 
+def stock_prices(ticker: str, from_date: str, to_date: str) -> pd.DataFrame | None:
+    """
+    for the caluclation of the p/e ratio, the stock prices for a range of dates must be obtained
 
+    """   
 
+    parameters = {
+        "symbol": ticker, 
+        "from": from_date,
+        "to": to_date,
+        "apikey": API_KEY
+    }
+
+    try:
+        response = requests.get(f"{BASE_URL}/historical-price-eod/full", params=parameters)
+        if response.status_code == 200:
+            logger.info(f"Request successful, status code: {response.status_code} for request at url: {response.url}")
+            shared_logger.info(f"Request successful for request at url: {response.url}")
+            response = response.json()
+        else:
+            response.raise_for_status()
+
+        df = pd.DataFrame(response)
+        return df
+    except requests.HTTPError:
+        logger.warning(requests.HTTPError)
+        shared_logger.warning(requests.HTTPError)
+    except Exception as e:
+        logger.warning(f"response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        print(e)
+        
 if __name__ == "__main__":
     main()
