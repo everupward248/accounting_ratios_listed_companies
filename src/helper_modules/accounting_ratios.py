@@ -102,14 +102,34 @@ def debt_equity_ratio(total_liabilities: float, total_shareholder_equity: float)
     """
     return total_liabilities / total_shareholder_equity
 
-def interest_cover():
-    ...
+def interest_cover(ebit: float, finance_cost: float) -> float:
+    """
+    a measure of a company's solvency and how well it can make the interest payments on its debt
 
-def equity_ratio():
-    ...
+    """
+    try:
+        # some companies do not present an interest expense if there is netting with interest income
+        # this does not mean that there is no interest expense but that the interest cover cannot be computed 
+        interest_cover = ebit / finance_cost
+    except ZeroDivisionError:
+        interest_cover = 0
+        shared_logger.info("The company data provided does not contain a value for interest expense for 1 or more periods")
+    return interest_cover
 
-def debt_ratio():
-    ...
+def equity_ratio(equity: float, assets: float) -> float:
+    """
+    a measure of how much of a company's assets are financed by equity
+    a lower score indicates that a company is highly leveraged
+
+    """
+    return equity / assets
+
+def debt_ratio(debt: float, assets: float) -> float:
+    """
+    a measure of a company's leverage
+    
+    """
+    return debt / assets
 
 # valuation
 def eps():

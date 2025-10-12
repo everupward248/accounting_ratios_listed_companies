@@ -103,15 +103,9 @@ def main() -> None:
                 merged_df = pd.merge(merged_df, cf_data, on="fiscalYear", how="inner", suffixes=("", "_df2"))
 
                 # apply the profitability ratios to the income statement data
-                merged_df["gross_profit_margin"] = merged_df.apply(
-                    lambda x: round(ar.gross_profit_margin(x["grossProfit"], x["revenue"]), 3), axis=1
-                    )
-                merged_df["operating_profit_margin"] = merged_df.apply(
-                    lambda x: round(ar.operating_profit_margin(x["operatingIncome"], x["revenue"]), 3), axis=1
-                    )
-                merged_df["net_profit_margin"] = merged_df.apply(
-                    lambda x: round(ar.operating_profit_margin(x["netIncome"], x["revenue"]), 3), axis=1
-                    )
+                merged_df["gross_profit_margin"] = merged_df.apply(lambda x: round(ar.gross_profit_margin(x["grossProfit"], x["revenue"]), 3), axis=1)
+                merged_df["operating_profit_margin"] = merged_df.apply(lambda x: round(ar.operating_profit_margin(x["operatingIncome"], x["revenue"]), 3), axis=1)
+                merged_df["net_profit_margin"] = merged_df.apply(lambda x: round(ar.operating_profit_margin(x["netIncome"], x["revenue"]), 3), axis=1)
                 
                 # user provides an option for the calculation of capital employed to be passed to the roce computation
                 while True:
@@ -119,14 +113,10 @@ def main() -> None:
                         capital_employed_type = int(input("select 1 for total assets less current liabilities or select 2 for equity plus non-current liabilities as measure of capital employed? ").strip())
 
                         if capital_employed_type == 1:
-                            merged_df["capital_employed"] = merged_df.apply(
-                                lambda x: round(ar.capital_employed(x["totalAssets"], x["totalCurrentLiabilities"], 1), 3), axis=1
-                                )
+                            merged_df["capital_employed"] = merged_df.apply(lambda x: round(ar.capital_employed(x["totalAssets"], x["totalCurrentLiabilities"], 1), 3), axis=1)
                             break
                         elif capital_employed_type == 2:
-                            merged_df["capital_employed"] = merged_df.apply(
-                                lambda x: round(ar.capital_employed(x["totalStockholdersEquity"], x["longTermDebt"] + x["capitalLeaseObligations"], 2), 3), axis=1
-                                )
+                            merged_df["capital_employed"] = merged_df.apply(lambda x: round(ar.capital_employed(x["totalStockholdersEquity"], x["longTermDebt"] + x["capitalLeaseObligations"], 2), 3), axis=1)
                             break
                         else:
                             print("must select a number 1 or 2")
@@ -137,22 +127,11 @@ def main() -> None:
                         print(e)
                         continue
 
-                merged_df["return_on_capital_employed"] = merged_df.apply(
-                    lambda x: round(ar.roce(x["operatingIncome"], x["capital_employed"]), 3), axis=1
-                    )
-                
-                merged_df["operating_cash_flow_margin"] = merged_df.apply(
-                    lambda x: round(ar.operating_cash_flow_margin(x["operatingCashFlow"], x["revenue"]), 3), axis=1
-                    )
-                merged_df["free_cash_flow_margin"] = merged_df.apply(
-                    lambda x: round(ar.free_cash_flow_margin(x["freeCashFlow"], x["revenue"]), 3), axis=1
-                    )
-                merged_df["return_on_equity"] = merged_df.apply(
-                    lambda x: round(ar.return_on_equity(x["netIncome"], x["totalStockholdersEquity"]), 3), axis=1
-                    )
-                merged_df["return_on_assets"] = merged_df.apply(
-                    lambda x: round(ar.return_on_assets(x["netIncome"], x["totalAssets"]), 3), axis=1
-                )
+                merged_df["return_on_capital_employed"] = merged_df.apply(lambda x: round(ar.roce(x["operatingIncome"], x["capital_employed"]), 3), axis=1)
+                merged_df["operating_cash_flow_margin"] = merged_df.apply(lambda x: round(ar.operating_cash_flow_margin(x["operatingCashFlow"], x["revenue"]), 3), axis=1)
+                merged_df["free_cash_flow_margin"] = merged_df.apply(lambda x: round(ar.free_cash_flow_margin(x["freeCashFlow"], x["revenue"]), 3), axis=1)
+                merged_df["return_on_equity"] = merged_df.apply(lambda x: round(ar.return_on_equity(x["netIncome"], x["totalStockholdersEquity"]), 3), axis=1)
+                merged_df["return_on_assets"] = merged_df.apply(lambda x: round(ar.return_on_assets(x["netIncome"], x["totalAssets"]), 3), axis=1)
                 
                 
                 # create a list of the ratio columns and to pass as headers to tabulate
@@ -163,8 +142,6 @@ def main() -> None:
                 print(tabulate(profitability_ratios_list, headers=cols, tablefmt="grid"))
                 logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
                 shared_logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
-
-                print(merged_df[["netIncome", "totalAssets"]])
             else:
                 logger.warning(f"The profitability ratios failed, ensure valid ticker")
                 shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
@@ -178,12 +155,14 @@ def main() -> None:
                 bs_data = bs.copy(deep=True)
                 merged_df = pd.merge(is_data, bs_data, on="fiscalYear", how="inner", suffixes=("", "_df2"))
 
-                merged_df["debt_to_equity"] = merged_df.apply(
-                    lambda x: round(ar.debt_equity_ratio(x["totalLiabilities"], x["totalStockholdersEquity"]), 3), axis=1)
+                merged_df["debt_to_equity"] = merged_df.apply(lambda x: round(ar.debt_equity_ratio(x["totalLiabilities"], x["totalStockholdersEquity"]), 3), axis=1)
+                merged_df["interest_cover"] = merged_df.apply(lambda x: round(ar.interest_cover(x["ebit"], x["interestExpense"]), 3), axis=1)
+                merged_df["equity_ratio"] = merged_df.apply(lambda x: round(ar.equity_ratio(x["totalEquity"], x["totalAssets"]), 3), axis=1)
+                merged_df["debt_ratio"] = merged_df.apply(lambda x: round(ar.debt_ratio(x["totalDebt"], x["totalAssets"]), 3), axis=1)
 
 
                 # create a list of the ratio columns and to pass as headers to tabulate
-                cols = ["fiscalYear", "date", "debt_to_equity"]
+                cols = ["fiscalYear", "date", "debt_to_equity", "interest_cover", "equity_ratio", "debt_ratio"]
                 gearing_ratios = merged_df[cols]
                 gearing_ratios_list = gearing_ratios.values.tolist()
 
