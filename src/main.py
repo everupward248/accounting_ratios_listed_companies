@@ -1,6 +1,7 @@
 from src.helper_modules.logger_setup import get_logger, shared_logger
 from src.helper_modules import accounting_ratios as ar
 from src.helper_modules import data_requests as dr
+from src.helper_modules import cli_functions as cl
 from tabulate import tabulate
 import argparse
 import pandas as pd
@@ -20,38 +21,11 @@ def main() -> None:
 
     # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
     if args.balance_sheet:
-        limit = dr.get_period()
-        if (df := dr.get_bs(args.balance_sheet, limit)) is not None and not df.empty:
-            df_transposed = df.transpose()
-            print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
-            logger.info(f"The balance sheet data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
-            shared_logger.info(f"The balance sheet data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
-        else:
-            print("There was an issue rendering your request. Please try again.")
-            logger.warning(f"Function returned: {df}")
-            shared_logger.warning(f"Function returned: {df}")
+        cl.get_balance_sheet(args.balance_sheet)
     elif args.income_statement:
-        limit = dr.get_period()
-        if (df := dr.get_is(args.income_statement, limit)) is not None and not df.empty: 
-            df_transposed = df.transpose()
-            print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
-            logger.info(f"The income statement data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
-            shared_logger.info(f"The income statement data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
-        else:
-            print("There was an issue rendering your request. Please try again.")
-            logger.warning(f"Function returned: {df}")
-            shared_logger.warning(f"Function returned: {df}")
+        cl.get_income_statement(args.income_statement)
     elif args.cash_flows:
-        limit = dr.get_period()
-        if (df := dr.get_cf(args.cash_flows, limit)) is not None and not df.empty: 
-            df_transposed = df.transpose()
-            print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
-            logger.info(f"The cash flows data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
-            shared_logger.info(f"The cash flows data for the requested company has been successfully returned to the user: {df["symbol"][0]}")
-        else:
-            print("There was an issue rendering your request. Please try again.")
-            logger.warning(f"Function returned: {df}")
-            shared_logger.warning(f"Function returned: {df}")
+        cl.get_cash_flows(args.cash_flows)
             
     # ratios
     if args.ratios:

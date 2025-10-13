@@ -1,1 +1,1 @@
-2025-10-13 08:04:39,343 - src.helper_modules.data_requests - INFO - Request successful, status code: 200 for request at url: https://financialmodelingprep.com/stable/income-statement?symbol=GS&period=annual&limit=3&apikey=LawRfh9kTAnttlB1oG5eUdOQMrbMOmxT - 167
+2025-10-13 08:15:03,026 - src.helper_modules.data_requests - INFO - Request successful, status code: 200 for request at url: https://financialmodelingprep.com/stable/cash-flow-statement?symbol=NVDA&period=annual&limit=5&apikey=LawRfh9kTAnttlB1oG5eUdOQMrbMOmxT - 203
