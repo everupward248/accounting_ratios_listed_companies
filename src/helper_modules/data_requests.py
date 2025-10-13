@@ -57,6 +57,8 @@ def get_name():
                 response.raise_for_status()
             return company_name
         except requests.HTTPError:
+            logger.warning(f"Request unsuccessful, status code: {response.status_code} for request at url: {response.url}")
+            shared_logger.warning(f"Request unsuccessful for request at url: {response.url}")
             logger.warning(requests.HTTPError)
             shared_logger.warning(requests.HTTPError)
         except Exception as e:
@@ -100,6 +102,8 @@ def get_ticker() -> str:
                 response.raise_for_status()
             return ticker
         except requests.HTTPError:
+            logger.warning(f"Request unsuccessful, status code: {response.status_code} for request at url: {response.url}")
+            shared_logger.warning(f"Request unsuccessful for request at url: {response.url}")
             logger.warning(requests.HTTPError)
             shared_logger.warning(requests.HTTPError)
         except Exception as e:
@@ -134,6 +138,8 @@ def get_bs(ticker: str, limit: int) -> pd.DataFrame | None:
         df = pd.DataFrame(response)
         return df
     except requests.HTTPError:
+        logger.warning(f"Request unsuccessful, status code: {response.status_code} for request at url: {response.url}")
+        shared_logger.warning(f"Request unsuccessful for request at url: {response.url}")
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
@@ -168,6 +174,8 @@ def get_is(ticker: str, limit: int) -> pd.DataFrame | None:
         df = pd.DataFrame(response)
         return df
     except requests.HTTPError:
+        logger.warning(f"Request unsuccessful, status code: {response.status_code} for request at url: {response.url}")
+        shared_logger.warning(f"Request unsuccessful for request at url: {response.url}")
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
@@ -202,6 +210,8 @@ def get_cf(ticker: str, limit: int) -> pd.DataFrame | None:
         df = pd.DataFrame(response)
         return df
     except requests.HTTPError:
+        logger.warning(f"Request unsuccessful, status code: {response.status_code} for request at url: {response.url}")
+        shared_logger.warning(f"Request unsuccessful for request at url: {response.url}")
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
@@ -234,6 +244,8 @@ def stock_prices(ticker: str, from_date: str, to_date: str) -> pd.DataFrame | No
         df = pd.DataFrame(response)
         return df
     except requests.HTTPError:
+        logger.warning(f"Request unsuccessful, status code: {response.status_code} for request at url: {response.url}")
+        shared_logger.warning(f"Request unsuccessful for request at url: {response.url}")
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
