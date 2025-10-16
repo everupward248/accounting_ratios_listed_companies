@@ -113,7 +113,7 @@ def interest_cover(ebit: float, finance_cost: float) -> float:
         interest_cover = ebit / finance_cost
     except ZeroDivisionError:
         interest_cover = 0
-        shared_logger.info("The company data provided does not contain a value for interest expense for 1 or more periods")
+        shared_logger.warning("The company data provided does not contain a value for interest expense for 1 or more periods")
     return interest_cover
 
 def equity_ratio(equity: float, assets: float) -> float:
@@ -132,10 +132,6 @@ def debt_ratio(debt: float, assets: float) -> float:
     return debt / assets
 
 # valuation
-def eps():
-    """
-    the amount of earnings allocated to each share of a company
-    """
 
 def pe_ratio(stock_price: float, eps: float) -> float:
     """
