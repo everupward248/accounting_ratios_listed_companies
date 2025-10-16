@@ -44,20 +44,25 @@ def main() -> None:
                 # obtain the data across all financial statements to compute the ratios
                 limit = dr.get_period()
                 cl.valuation(ticker, limit)
+            elif "all" in args.ratios:
+                limit = dr.get_period()
+                cl.all_ratios(ticker, limit)
             logger.info(f"user has successfully used the {args.ratios} function")
             shared_logger.info(f"user has successfully used the {args.ratios} function")
         except Exception as e:
             logger.warning(f"user has unsuccessfully used the {args.ratios} function")
             shared_logger.warning(f"user has unsuccessfully used the {args.ratios} function")
 
+    else:
+        sys.exit("Please provide an argument to the CLI. Use '-h' or '--help' to view options")
+
 
 def cli() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="This program is a CLI tool which allows users to fetch the accounting ratios of listed companies when provided the ticker.")
+    parser = argparse.ArgumentParser(description="This program is a CLI tool which allows users to fetch the financial statements and accounting ratios of listed companies when provided the ticker.")
     parser.add_argument("-bs", "--balance_sheet", type=str, help="Use this flag to obtain the balance sheet data for a given listed company. Provide the company ticker.")
     parser.add_argument("-is", "--income_statement", type=str, help="Use this flag to obtain the income statement data for a given listed company. Provide the company ticker.")
     parser.add_argument("-cf", "--cash_flows", type=str, help="Use this flag to obtain the cash flows data for a given listed company. Provide the company ticker.")
     parser.add_argument("-r", "--ratios", type=str, choices=["liquidity", "profitability", "gearing", "valuation", "all"], help="Use this flag to obtain the financial ratios of a selected listed company. Provide a choice which which category of ratios or all.")
-    parser.add_argument("-nt", "--name_ticker", action="store_true", help="Omit this flag for tickers and include for the legally registered company name.")
     parser.add_argument("-gnt", "--get_name_ticker", type=str, choices=["name", "ticker"], help="Use this flag to obtain the legally registered company name or ticker per the ticker and company name respectively.")
     return parser
 

@@ -63,7 +63,7 @@ def get_cash_flows(ticker: str) -> None:
         shared_logger.warning(f"Function returned: {df}")
 
 # functions for ratios
-def liquidity(ticker: str, limit: int) -> None:
+def liquidity(ticker: str, limit: int) -> pd.DataFrame:
     """
     obtains the liquidity ratios for a listed company
     
@@ -89,15 +89,15 @@ def liquidity(ticker: str, limit: int) -> None:
         liquidity_ratios_list = liquidity_ratios.values.tolist()
 
         print(tabulate(liquidity_ratios_list, headers=cols, tablefmt="grid"))
-
         logger.info(f"The liquidity ratios have been provided for {ratio_data["symbol"][0]}")
         shared_logger.info(f"The liquidity ratios have been provided for {ratio_data["symbol"][0]}")
+        return liquidity_ratios
     else:
         logger.warning(f"The liquidity ratios failed, ensure valid ticker")
         shared_logger.warning(f"The liquidity ratios failed, ensure valid ticker")
         sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
 
-def profitability(ticker: str, limit: int) -> None:
+def profitability(ticker: str, limit: int) -> pd.DataFrame:
     """
     obtains the profitability ratios for a listed company
     
@@ -153,12 +153,13 @@ def profitability(ticker: str, limit: int) -> None:
         print(tabulate(profitability_ratios_list, headers=cols, tablefmt="grid"))
         logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
         shared_logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
+        return profitability_ratios
     else:
         logger.warning(f"The profitability ratios failed, ensure valid ticker")
         shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
         sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
 
-def gearing(ticker: str, limit: int) -> None:
+def gearing(ticker: str, limit: int) -> pd.DataFrame:
     """
     obtains the gearing ratios for a listed company
     
@@ -184,12 +185,13 @@ def gearing(ticker: str, limit: int) -> None:
         print(tabulate(gearing_ratios_list, headers=cols, tablefmt="grid"))
         logger.info(f"The gearing ratios have been provided for {merged_df["symbol"][0]}")
         shared_logger.info(f"The gearing ratios have been provided for {merged_df["symbol"][0]}")
+        return gearing_ratios
     else:
         logger.warning(f"The profitability ratios failed, ensure valid ticker")
         shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
         sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
 
-def valuation(ticker: str, limit: int) -> None:
+def valuation(ticker: str, limit: int) -> pd.DataFrame:
     """
     obtain the valuation ratios for a listed company
     
@@ -227,6 +229,7 @@ def valuation(ticker: str, limit: int) -> None:
             print(tabulate(valuation_ratios_list, headers=cols, tablefmt="grid"))
             logger.info(f"The valuation ratios have been provided for {merged_df["symbol"][0]}")
             shared_logger.info(f"The valuation ratios have been provided for {merged_df["symbol"][0]}")
+            return valuation_ratios
         else:
             logger.warning(f"The valuation ratios failed, ensure valid ticker")
             shared_logger.warning(f"The valuation ratios failed, ensure valid ticker")
@@ -236,6 +239,25 @@ def valuation(ticker: str, limit: int) -> None:
         logger.warning(f"The valuation ratios failed, ensure valid ticker")
         shared_logger.warning(f"The valuation ratios failed, ensure valid ticker")
         sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
+
+def all_ratios(ticker: str, limit: int) -> None:
+    """
+    returns all ratios of a listed company
+    
+    """
+    print("\n")
+    print("Liquidity Ratios")
+    liquidity_df = liquidity(ticker, limit)
+    print("\n")
+    print("Profitability Ratios")
+    profitability_df = profitability(ticker, limit)
+    print("\n")
+    print("Gearing Ratios")
+    gearing_df = gearing(ticker, limit)
+    print("\n")
+    print("Valuation Ratios")
+    valuation_df = valuation(ticker, limit)
+ 
 
 
 if __name__ == "__main__":
