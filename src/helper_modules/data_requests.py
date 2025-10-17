@@ -240,7 +240,7 @@ def stock_prices(ticker: str, from_date: str, to_date: str) -> pd.DataFrame | No
             response = response.json()
         else:
             response.raise_for_status()
-
+        
         df = pd.DataFrame(response)
         return df
     except requests.HTTPError:

@@ -9,7 +9,7 @@ logger = get_logger(__name__)
 
 # functions for financial statements
 def main():
-    gearing("NVDA", 5)
+    valuation("NVDA", 1)
 
 # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
 def get_balance_sheet(ticker: str) -> None:
@@ -213,7 +213,23 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
             for i in range(len(stock_prices)):
                 if stock_prices.loc[i]["date"] in dates:
                     df.loc[i] = stock_prices.loc[i]
-        
+            
+            # there could potentially be misses if the year end date on the financials was not an actively trading day
+            # create a separate list for the misses then try decrementing dates until a valid date is found and then append to the df
+            date_miss = []
+
+            try:
+                for date in dates:
+                    if date not in df.date.to_string(index=False):
+                        date_miss.append(date)
+            except Exception as e:
+                print(e)
+            
+            # convert the date misses into datetimes and then decrement and retry appending from the stock list dates
+            # decrement for a range of a week to ensure a hit
+            # use datetime.strptime to parse the date string according to its format and then convert to datetime
+           
+
             stock_price_data = df.copy(deep=True)
             # merge the data sets
             merged_df = pd.merge(is_data, stock_price_data, on="date", how="inner", suffixes=("", "_df2"))
