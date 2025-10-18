@@ -204,7 +204,13 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
         dates = list(is_data["date"])
         from_date = dates[-1]
         to_date = dates[0]
-
+        
+        # decrement the from_date as it may not be an actively trading day
+        date_format_string = "%Y-%m-%d"
+        from_date = dt.datetime.strptime(from_date, date_format_string)
+        from_date = from_date - dt.timedelta(days=5)
+        from_date = str(from_date.date())
+        
         # obtain the rows of the stock prices for only the financial statement year end dates
         if (stock_prices := dr.stock_prices(ticker, from_date, to_date)) is not None:
             # initialize an empty dataframe with the stock price columns to extract only the ye dates, 
@@ -214,6 +220,9 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
             for i in range(len(stock_prices)):
                 if stock_prices.loc[i]["date"] in dates:
                     df.loc[i] = stock_prices.loc[i]
+            
+            logger.info(f"Stock prices successfull added: {df.close}")
+            shared_logger.info(f"Stock prices successfull added: {df.close}")
             
             # there could potentially be misses if the year end date on the financials was not an actively trading day
             # create a separate list for the misses then try decrementing dates until a valid date is found and then append to the df
@@ -231,55 +240,14 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
             # use datetime.strptime to parse the date string according to its format and then convert to datetime, use timedelta to decrement the days
 
             if len(date_miss) > 0:
-                logger.warning(f"the following dates were not obtained for the stock price: {date_miss}")
-                shared_logger.warning(f"the following dates were not obtained for the stock price: {date_miss}")
-
-                date_format_string = "%Y-%m-%d"
-
-                try:
-                    # create a list of lists to store the date misses with their decrements
-                    converted_date_misses = []
-
-                    for date in date_miss:
-                        converted_date = dt.datetime.strptime(date, date_format_string)
-                        
-                        decremented_dates = []
-
-                        for i in range(3):
-                            decremented_date = converted_date - dt.timedelta(days=i+1)
-                            # convert the datetime objects into dates before converting to strings
-                            decremented_dates.append(str(decremented_date.date()))
-                        
-                        converted_date_misses.append(decremented_dates)
-                
-                    logger.info("missing dates have been successuflly decremented and converted into date strings")
-                    shared_logger.info("missing dates have been successuflly decremented and converted into date strings")
-                except Exception as e:
-                    print(e)
-                    logger.warning(f"{e}")
-                    shared_logger.warning(f"{e}")
-            
-                # iterate throught the converted date misses until a stock price is found
-                for date in converted_date_misses:
-                    # append only the year date prices
-                    hit = False
-
-                    for i in range(len(stock_prices)):
-                        if hit == True:
-                            break
-                        elif stock_prices.loc[i]["date"] in date:
-                            df.loc[i] = stock_prices.loc[i]
-                            hit = True
-                        else:
-                            continue
-                
+                df = stock_price_misses(date_miss, stock_prices, df)
                 # sort the df by the date column
                 df = df.sort_values(by=["date"], ascending=False)
-                # extract only the year to match on the fiscal year
-                df["fiscalYear"] = df["date"].str.split("-").str[0]
-
             else:
                 pass
+        
+            # extract only the year to match on the fiscal year
+            df["fiscalYear"] = df["date"].str.split("-").str[0]
 
             stock_price_data = df.copy(deep=True)
             # merge the data sets
@@ -325,6 +293,52 @@ def all_ratios(ticker: str, limit: int) -> None:
     print("Valuation Ratios")
     valuation_df = valuation(ticker, limit)
  
+ # some stock prices will be ommited if using only the year end financial date
+def stock_price_misses(date_miss: list, stock_prices: pd.DataFrame, df: pd.DataFrame) -> pd.DataFrame:
+    """
+    obtains missed stock prices by taking the most recent stock price decremented from the year end financial date
+    
+    """
+    date_format_string = "%Y-%m-%d"
+
+    try:
+        # create a list of lists to store the date misses with their decrements
+        converted_date_misses = []
+
+        for date in date_miss:
+            converted_date = dt.datetime.strptime(date, date_format_string)
+            
+            decremented_dates = []
+
+            for i in range(3):
+                decremented_date = converted_date - dt.timedelta(days=i+1)
+                # convert the datetime objects into dates before converting to strings
+                decremented_dates.append(str(decremented_date.date()))
+            
+            converted_date_misses.append(decremented_dates)
+    
+        logger.info("Missing dates have been successuflly decremented and converted into date strings")
+        shared_logger.info("Missing dates have been successuflly decremented and converted into date strings")
+    except Exception as e:
+        print(e)
+        logger.warning(f"{e}")
+        shared_logger.warning(f"{e}")
+
+    # iterate throught the converted date misses until a stock price is found
+    for date in converted_date_misses:
+        # append only the year date prices
+        hit = False
+
+        for i in range(len(stock_prices)):
+            if hit == True:
+                break
+            elif stock_prices.loc[i]["date"] in date:
+                df.loc[i] = stock_prices.loc[i]
+                hit = True
+            else:
+                continue
+
+    return df
 
 
 if __name__ == "__main__":

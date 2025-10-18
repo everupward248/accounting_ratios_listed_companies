@@ -62,8 +62,8 @@ def get_name():
             logger.warning(requests.HTTPError)
             shared_logger.warning(requests.HTTPError)
         except Exception as e:
-            logger.warning(f"response request has failed, status code: {response.status_code}")
-            shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+            logger.warning(f"Response request has failed, status code: {response.status_code}")
+            shared_logger.warning(f"Response request has failed, status code: {response.status_code}")
             print(e)
 
 def get_ticker() -> str:
@@ -107,8 +107,8 @@ def get_ticker() -> str:
             logger.warning(requests.HTTPError)
             shared_logger.warning(requests.HTTPError)
         except Exception as e:
-            logger.warning(f"response request has failed, status code: {response.status_code}")
-            shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+            logger.warning(f"Response request has failed, status code: {response.status_code}")
+            shared_logger.warning(f"Response request has failed, status code: {response.status_code}")
             print(e)
 
 def get_bs(ticker: str, limit: int) -> pd.DataFrame | None:
@@ -143,8 +143,8 @@ def get_bs(ticker: str, limit: int) -> pd.DataFrame | None:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
-        logger.warning(f"response request has failed, status code: {response.status_code}")
-        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        logger.warning(f"Response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"Response request has failed, status code: {response.status_code}")
         print(e)
 
 def get_is(ticker: str, limit: int) -> pd.DataFrame | None:
@@ -179,8 +179,8 @@ def get_is(ticker: str, limit: int) -> pd.DataFrame | None:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
-        logger.warning(f"response request has failed, status code: {response.status_code}")
-        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        logger.warning(f"Response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"Response request has failed, status code: {response.status_code}")
         print(e)
 
 def get_cf(ticker: str, limit: int) -> pd.DataFrame | None:
@@ -215,8 +215,8 @@ def get_cf(ticker: str, limit: int) -> pd.DataFrame | None:
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
-        logger.warning(f"response request has failed, status code: {response.status_code}")
-        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        logger.warning(f"Response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"Response request has failed, status code: {response.status_code}")
         print(e)
 
 def stock_prices(ticker: str, from_date: str, to_date: str) -> pd.DataFrame | None:
@@ -249,8 +249,8 @@ def stock_prices(ticker: str, from_date: str, to_date: str) -> pd.DataFrame | No
         logger.warning(requests.HTTPError)
         shared_logger.warning(requests.HTTPError)
     except Exception as e:
-        logger.warning(f"response request has failed, status code: {response.status_code}")
-        shared_logger.warning(f"response request has failed, status code: {response.status_code}")
+        logger.warning(f"Response request has failed, status code: {response.status_code}")
+        shared_logger.warning(f"Response request has failed, status code: {response.status_code}")
         print(e)
         
 if __name__ == "__main__":
