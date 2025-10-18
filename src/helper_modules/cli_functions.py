@@ -221,8 +221,8 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
                 if stock_prices.loc[i]["date"] in dates:
                     df.loc[i] = stock_prices.loc[i]
             
-            logger.info(f"Stock prices successfull added: {df.close}")
-            shared_logger.info(f"Stock prices successfull added: {df.close}")
+            logger.info(f"Stock prices successfully added: {[str(price) for price in df.close]}")
+            shared_logger.info(f"Stock prices successfully added: {[str(price) for price in df.close]}")
             
             # there could potentially be misses if the year end date on the financials was not an actively trading day
             # create a separate list for the misses then try decrementing dates until a valid date is found and then append to the df
@@ -240,7 +240,11 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
             # use datetime.strptime to parse the date string according to its format and then convert to datetime, use timedelta to decrement the days
 
             if len(date_miss) > 0:
+                logger.warning(f"The following dates were not obtained for the stock price: {date_miss}")
+                shared_logger.warning(f"The following dates were not obtained for the stock price: {date_miss}")
+
                 df = stock_price_misses(date_miss, stock_prices, df)
+
                 # sort the df by the date column
                 df = df.sort_values(by=["date"], ascending=False)
             else:
@@ -317,8 +321,8 @@ def stock_price_misses(date_miss: list, stock_prices: pd.DataFrame, df: pd.DataF
             
             converted_date_misses.append(decremented_dates)
     
-        logger.info("Missing dates have been successuflly decremented and converted into date strings")
-        shared_logger.info("Missing dates have been successuflly decremented and converted into date strings")
+        logger.info(f"Missing dates have been successuflly decremented and converted into date strings: {converted_date_misses}")
+        shared_logger.info(f"Missing dates have been successuflly decremented and converted into date strings: {converted_date_misses}")
     except Exception as e:
         print(e)
         logger.warning(f"{e}")
@@ -335,11 +339,12 @@ def stock_price_misses(date_miss: list, stock_prices: pd.DataFrame, df: pd.DataF
             elif stock_prices.loc[i]["date"] in date:
                 df.loc[i] = stock_prices.loc[i]
                 hit = True
+                logger.info(f"Date hit: {stock_prices.loc[i]["date"]} - Close: {stock_prices.loc[i]["close"]}")
+                shared_logger.info(f"Date hit: {stock_prices.loc[i]["date"]} - Close: {stock_prices.loc[i]["close"]}")
             else:
                 continue
 
     return df
-
 
 if __name__ == "__main__":
     main()

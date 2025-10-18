@@ -53,6 +53,8 @@ def main() -> None:
             shared_logger.warning(f"user has unsuccessfully used the {args.ratios} function")
 
     if len(sys.argv) <= 1:
+        logger.info(f"User did not provide any options")
+        shared_logger.info(f"User did not provide any options")
         sys.exit("Please provide an argument to the CLI. Use '-h' or '--help' to view options")
     
 

@@ -16,7 +16,11 @@ def main():
 
 def get_period() -> int:
      while True:
-        limit = int(input("For how many annual periods do you want the financial statement(s): ").strip())
+        try:
+            limit = int(input("For how many annual periods do you want the financial statement(s): ").strip())
+        except ValueError:
+            print("Must submit an integer")
+            continue
         if 5 < limit or limit <= 0:
             print("Maximum periods is 5. Please provide an integer value between 1 and 5")
             continue

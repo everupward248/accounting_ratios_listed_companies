@@ -1,7 +1,1 @@
-2025-10-18 12:39:31,713 - src.helper_modules.cli_functions - INFO - Stock prices successfull added: 0        233.0
-501      138.2
-753      141.5
-1005    115.81
-Name: close, dtype: object - 224
-2025-10-18 12:39:31,714 - src.helper_modules.cli_functions - INFO - Missing dates have been successuflly decremented and converted into date strings - 320
-2025-10-18 12:39:31,721 - src.helper_modules.cli_functions - INFO - The valuation ratios have been provided for AAPL - 265
+2025-10-18 13:04:45,392 - src.helper_modules.cli_functions - WARNING - The liquidity ratios failed, ensure valid ticker - 97
