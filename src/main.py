@@ -2,7 +2,6 @@ from src.helper_modules.logger_setup import get_logger, shared_logger
 from src.helper_modules import accounting_ratios as ar
 from src.helper_modules import data_requests as dr
 from src.helper_modules import cli_functions as cl
-from tabulate import tabulate
 import argparse
 import pandas as pd
 import sys
@@ -53,8 +52,9 @@ def main() -> None:
             logger.warning(f"user has unsuccessfully used the {args.ratios} function")
             shared_logger.warning(f"user has unsuccessfully used the {args.ratios} function")
 
-    else:
+    if len(sys.argv) <= 1:
         sys.exit("Please provide an argument to the CLI. Use '-h' or '--help' to view options")
+    
 
 
 def cli() -> argparse.ArgumentParser:

@@ -1,1 +1,5 @@
-2025-10-17 09:22:45,569 - src.helper_modules.cli_functions - INFO - The valuation ratios have been provided for AAPL - 244
+2025-10-18 10:54:05,777 - src.helper_modules.cli_functions - INFO - The liquidity ratios have been provided for JPM - 93
+2025-10-18 10:54:08,849 - src.helper_modules.cli_functions - INFO - The profitability ratios have been provided for JPM - 155
+2025-10-18 10:54:09,979 - src.helper_modules.cli_functions - INFO - The gearing ratios have been provided for JPM - 187
+2025-10-18 10:54:11,205 - src.helper_modules.cli_functions - WARNING - the following dates were not obtained for the stock price: ['2023-12-31', '2022-12-31'] - 234
+2025-10-18 10:54:11,207 - src.helper_modules.cli_functions - INFO - The valuation ratios have been provided for JPM - 257

@@ -3,13 +3,14 @@ from src.helper_modules import accounting_ratios as ar
 from src.helper_modules import data_requests as dr
 from tabulate import tabulate
 import pandas as pd
+import datetime as dt
 import sys
 
 logger = get_logger(__name__)
 
 # functions for financial statements
 def main():
-    valuation("NVDA", 1)
+    valuation("AAPL", 5)
 
 # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
 def get_balance_sheet(ticker: str) -> None:
@@ -206,7 +207,7 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
 
         # obtain the rows of the stock prices for only the financial statement year end dates
         if (stock_prices := dr.stock_prices(ticker, from_date, to_date)) is not None:
-            # initialize a dataframe to extract only the ye dates, 
+            # initialize an empty dataframe with the stock price columns to extract only the ye dates, 
             df = pd.DataFrame(columns=stock_prices.columns)
 
             # append only the year date prices
@@ -226,13 +227,63 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
                 print(e)
             
             # convert the date misses into datetimes and then decrement and retry appending from the stock list dates
-            # decrement for a range of a week to ensure a hit
-            # use datetime.strptime to parse the date string according to its format and then convert to datetime
-           
+            # decrement for a range of a 3 days to ensure a hit
+            # use datetime.strptime to parse the date string according to its format and then convert to datetime, use timedelta to decrement the days
+
+            if len(date_miss) > 0:
+                logger.warning(f"the following dates were not obtained for the stock price: {date_miss}")
+                shared_logger.warning(f"the following dates were not obtained for the stock price: {date_miss}")
+
+                date_format_string = "%Y-%m-%d"
+
+                try:
+                    # create a list of lists to store the date misses with their decrements
+                    converted_date_misses = []
+
+                    for date in date_miss:
+                        converted_date = dt.datetime.strptime(date, date_format_string)
+                        
+                        decremented_dates = []
+
+                        for i in range(3):
+                            decremented_date = converted_date - dt.timedelta(days=i+1)
+                            # convert the datetime objects into dates before converting to strings
+                            decremented_dates.append(str(decremented_date.date()))
+                        
+                        converted_date_misses.append(decremented_dates)
+                
+                    logger.info("missing dates have been successuflly decremented and converted into date strings")
+                    shared_logger.info("missing dates have been successuflly decremented and converted into date strings")
+                except Exception as e:
+                    print(e)
+                    logger.warning(f"{e}")
+                    shared_logger.warning(f"{e}")
+            
+                # iterate throught the converted date misses until a stock price is found
+                for date in converted_date_misses:
+                    # append only the year date prices
+                    hit = False
+
+                    for i in range(len(stock_prices)):
+                        if hit == True:
+                            break
+                        elif stock_prices.loc[i]["date"] in date:
+                            df.loc[i] = stock_prices.loc[i]
+                            hit = True
+                        else:
+                            continue
+                
+                # sort the df by the date column
+                df = df.sort_values(by=["date"], ascending=False)
+                # extract only the year to match on the fiscal year
+                df["fiscalYear"] = df["date"].str.split("-").str[0]
+
+            else:
+                pass
 
             stock_price_data = df.copy(deep=True)
             # merge the data sets
-            merged_df = pd.merge(is_data, stock_price_data, on="date", how="inner", suffixes=("", "_df2"))
+            merged_df = pd.merge(is_data, stock_price_data, on="fiscalYear", how="inner", suffixes=("", "_df2"))
 
             merged_df["p/e_ratio"] = merged_df.apply(lambda x: round(ar.pe_ratio(x["close"], x["eps"]), 3), axis=1)
             merged_df["p/e_ratio_diluted"] = merged_df.apply(lambda x: round(ar.pe_ratio(x["close"], x["epsDiluted"]), 3), axis=1)

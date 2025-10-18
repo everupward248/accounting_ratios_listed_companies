@@ -1,1 +1,3 @@
-2025-10-16 08:14:57,199 - __main__ - INFO - The gearing ratios have been provided for NVDA - 185
+2025-10-18 12:04:52,029 - __main__ - WARNING - the following dates were not obtained for the stock price: ['2023-09-30'] - 234
+2025-10-18 12:04:52,030 - __main__ - INFO - missing dates have been successuflly decremented and converted into date strings - 255
+2025-10-18 12:04:52,037 - __main__ - INFO - The valuation ratios have been provided for AAPL - 297
