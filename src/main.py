@@ -17,11 +17,14 @@ def main() -> None:
         print(dr.get_name())
 
     if args.balance_sheet:
-        cl.get_balance_sheet(args.balance_sheet)
+        limit = dr.get_period()
+        cl.get_balance_sheet(args.balance_sheet, limit)
     elif args.income_statement:
-        cl.get_income_statement(args.income_statement)
+        limit = dr.get_period()
+        cl.get_income_statement(args.income_statement, limit)
     elif args.cash_flows:
-        cl.get_cash_flows(args.cash_flows)
+        limit = dr.get_period()
+        cl.get_cash_flows(args.cash_flows, limit)
             
     # ratios
     if args.ratios:
@@ -52,7 +55,8 @@ def main() -> None:
 
     # excel output
     if args.export_data:
-        ...
+        limit = dr.get_period()
+        cl.export_financials(args.export_data, limit)
 
     if len(sys.argv) <= 1:
         logger.info(f"User did not provide any options")
@@ -68,7 +72,7 @@ def cli() -> argparse.ArgumentParser:
     parser.add_argument("-cf", "--cash_flows", type=str, help="Use this flag to obtain the cash flows data for a given listed company. Provide the company ticker.")
     parser.add_argument("-r", "--ratios", type=str, choices=["liquidity", "profitability", "gearing", "valuation", "all"], help="Use this flag to obtain the financial ratios of a selected listed company. Provide a choice which which category of ratios or all.")
     parser.add_argument("-gnt", "--get_name_ticker", type=str, choices=["name", "ticker"], help="Use this flag to obtain the legally registered company name or ticker per the ticker and company name respectively.")
-    parser.add_argument("-exp", "export_data", action="store_true", help="Use this flag to export all the financials and ratio charts of the company into an excel file at the desired file PATH")
+    parser.add_argument("-exp", "--export_data", type=str, help="Use this flag to export all the financials and ratio charts of the company into an excel file at the desired file PATH")
     return parser
 
 if __name__ == "__main__":

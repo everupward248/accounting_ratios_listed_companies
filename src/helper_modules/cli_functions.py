@@ -1,6 +1,8 @@
 from src.helper_modules.logger_setup import get_logger, shared_logger
 from src.helper_modules import accounting_ratios as ar
 from src.helper_modules import data_requests as dr
+from src.helper_modules.file import get_path
+from src.helper_modules.excel_output import convert_to_excel
 from tabulate import tabulate
 import pandas as pd
 import datetime as dt
@@ -13,12 +15,11 @@ def main():
     valuation("AAPL", 5)
 
 # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
-def get_balance_sheet(ticker: str) -> None:
+def get_balance_sheet(ticker: str, limit: int) -> None:
     """
     retrieves the balance sheet data for a company when specified in the cli
     
     """
-    limit = dr.get_period()
     if (df := dr.get_bs(ticker, limit)) is not None and not df.empty:
         df_transposed = df.transpose()
         print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
@@ -30,12 +31,11 @@ def get_balance_sheet(ticker: str) -> None:
         shared_logger.warning(f"Function returned: {df}")
 
 # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
-def get_income_statement(ticker: str) -> None:
+def get_income_statement(ticker: str, limit: int) -> None:
     """
     retrieves the income statement data for a company when specified in the cli
     
     """
-    limit = dr.get_period()
     if (df := dr.get_is(ticker, limit)) is not None and not df.empty: 
         df_transposed = df.transpose()
         print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
@@ -47,12 +47,11 @@ def get_income_statement(ticker: str) -> None:
         shared_logger.warning(f"Function returned: {df}")
 
 # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
-def get_cash_flows(ticker: str) -> None:
+def get_cash_flows(ticker: str, limit: int) -> None:
     """
     retrieves the cash flows data for a company when specified in the cli
     
     """
-    limit = dr.get_period()
     if (df := dr.get_cf(ticker, limit)) is not None and not df.empty: 
         df_transposed = df.transpose()
         print(tabulate(df_transposed.reset_index().values.tolist(), tablefmt="grid"))
@@ -351,6 +350,17 @@ def export_financials(ticker: str, limit: int) -> None:
     exports all financials for a listed company with charted ratios to a user specified file path
     
     """
+
+    # get all the financials as dataframes
+    if (bs_df := dr.get_bs(ticker, limit)) is not None and (is_df := dr.get_is(ticker, limit)) is not None and (cf_df := dr.get_is(ticker, limit)) is not None:
+        # obtain the file path and export to excel
+        file_path = get_path()
+        
+        # pass the financial statements transposed to match financial statement format more closely
+        convert_to_excel(file_path, bs_df.transpose(), is_df.transpose(), cf_df.transpose())
+        logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
+        shared_logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
+
 
     
 
