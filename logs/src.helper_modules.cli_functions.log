@@ -1,1 +1,8 @@
-2025-10-18 13:04:45,392 - src.helper_modules.cli_functions - WARNING - The liquidity ratios failed, ensure valid ticker - 97
+2025-10-21 09:09:54,674 - src.helper_modules.cli_functions - INFO - The liquidity ratios have been provided for NVDA - 93
+2025-10-21 09:09:57,059 - src.helper_modules.cli_functions - INFO - The profitability ratios have been provided for NVDA - 155
+2025-10-21 09:09:58,143 - src.helper_modules.cli_functions - INFO - The gearing ratios have been provided for NVDA - 187
+2025-10-21 09:09:59,253 - src.helper_modules.cli_functions - INFO - Stock prices successfully added: ['120.07', '61.53', '19.54', '24.49'] - 224
+2025-10-21 09:09:59,254 - src.helper_modules.cli_functions - WARNING - The following dates were not obtained for the stock price: ['2021-01-31'] - 243
+2025-10-21 09:09:59,254 - src.helper_modules.cli_functions - INFO - Missing dates have been successuflly decremented and converted into date strings: [['2021-01-30', '2021-01-29', '2021-01-28']] - 324
+2025-10-21 09:09:59,269 - src.helper_modules.cli_functions - INFO - Date hit: 2021-01-29 - Close: 12.99 - 342
+2025-10-21 09:09:59,271 - src.helper_modules.cli_functions - INFO - The valuation ratios have been provided for NVDA - 269

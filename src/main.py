@@ -1,9 +1,7 @@
 from src.helper_modules.logger_setup import get_logger, shared_logger
-from src.helper_modules import accounting_ratios as ar
 from src.helper_modules import data_requests as dr
 from src.helper_modules import cli_functions as cl
 import argparse
-import pandas as pd
 import sys
 
 
@@ -52,6 +50,10 @@ def main() -> None:
             logger.warning(f"user has unsuccessfully used the {args.ratios} function")
             shared_logger.warning(f"user has unsuccessfully used the {args.ratios} function")
 
+    # excel output
+    if args.export_data:
+        ...
+
     if len(sys.argv) <= 1:
         logger.info(f"User did not provide any options")
         shared_logger.info(f"User did not provide any options")
@@ -66,6 +68,7 @@ def cli() -> argparse.ArgumentParser:
     parser.add_argument("-cf", "--cash_flows", type=str, help="Use this flag to obtain the cash flows data for a given listed company. Provide the company ticker.")
     parser.add_argument("-r", "--ratios", type=str, choices=["liquidity", "profitability", "gearing", "valuation", "all"], help="Use this flag to obtain the financial ratios of a selected listed company. Provide a choice which which category of ratios or all.")
     parser.add_argument("-gnt", "--get_name_ticker", type=str, choices=["name", "ticker"], help="Use this flag to obtain the legally registered company name or ticker per the ticker and company name respectively.")
+    parser.add_argument("-exp", "export_data", action="store_true", help="Use this flag to export all the financials and ratio charts of the company into an excel file at the desired file PATH")
     return parser
 
 if __name__ == "__main__":

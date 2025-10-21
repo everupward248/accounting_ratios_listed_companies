@@ -75,7 +75,7 @@ def operating_cash_flow_margin(operating_cash_flow: float, revenue: float) -> fl
 
 def free_cash_flow_margin(free_cash_flow: float, revenue: float) -> float:
     """
-    cash flow margin is a measure of how efficiently a business converts its sales into actual cash
+    free cash flow margin is a measure of how efficiently a business converts its revenues into actual cash after accounting for operating expenses and capital expenditures
     
     """
     return free_cash_flow / revenue

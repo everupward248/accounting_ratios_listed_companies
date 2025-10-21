@@ -346,5 +346,13 @@ def stock_price_misses(date_miss: list, stock_prices: pd.DataFrame, df: pd.DataF
 
     return df
 
+def export_financials(ticker: str, limit: int) -> None:
+    """
+    exports all financials for a listed company with charted ratios to a user specified file path
+    
+    """
+
+    
+
 if __name__ == "__main__":
     main()

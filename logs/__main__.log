@@ -1,3 +1,8 @@
-2025-10-18 12:04:52,029 - __main__ - WARNING - the following dates were not obtained for the stock price: ['2023-09-30'] - 234
-2025-10-18 12:04:52,030 - __main__ - INFO - missing dates have been successuflly decremented and converted into date strings - 255
-2025-10-18 12:04:52,037 - __main__ - INFO - The valuation ratios have been provided for AAPL - 297
+2025-10-21 09:43:59,746 - __main__ - WARNING - Invalid file path provided - 21
+2025-10-21 09:44:00,463 - __main__ - WARNING - Invalid file path provided - 21
+2025-10-21 09:44:00,937 - __main__ - WARNING - File path not provided - 26
+2025-10-21 09:44:01,532 - __main__ - WARNING - File path not provided - 26
+2025-10-21 09:44:01,924 - __main__ - WARNING - File path not provided - 26
+2025-10-21 09:44:02,071 - __main__ - WARNING - File path not provided - 26
+2025-10-21 09:44:02,700 - __main__ - WARNING - Invalid file path provided - 21
+2025-10-21 09:44:32,106 - __main__ - INFO - File path successfully provided: C:\Users\johnj\OneDrive\Documents\study\study_tracker - 31
