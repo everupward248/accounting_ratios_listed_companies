@@ -355,14 +355,35 @@ def export_financials(ticker: str, limit: int) -> None:
     if (bs_df := dr.get_bs(ticker, limit)) is not None and (is_df := dr.get_is(ticker, limit)) is not None and (cf_df := dr.get_is(ticker, limit)) is not None:
         # obtain the file path and export to excel
         file_path = get_path()
+
+        try:
+            # create dataframes for all the ratios
+            liquidity_ratios = liquidity(ticker, limit)
+            profitability_ratios = profitability(ticker, limit)
+            gearing_ratios = gearing(ticker, limit)
+            valuation_ratios = valuation(ticker, limit)
+
+            # store in a dictionary to pass separately from financials as these are formatted differently in the excel output
+            ratio_dict = {"liquidity_ratios": liquidity_ratios,
+                          "profitability_ratios": profitability_ratios,
+                          "gearing_ratios": gearing_ratios,
+                          "valuation_ratios": valuation_ratios}
+            
+        except Exception as e:
+            print(e)
+            logger.warning(e)
+            shared_logger.warning(e)
         
         # pass the financial statements transposed to match financial statement format more closely
-        convert_to_excel(file_path, bs_df.sort_values("date").transpose(), is_df.sort_values("date").transpose(), cf_df.sort_values("date").transpose())
+        convert_to_excel(file_path, 
+                         bs_df.sort_values("date").transpose(), 
+                         is_df.sort_values("date").transpose(), 
+                         cf_df.sort_values("date").transpose(),
+                         **ratio_dict)
+        
         logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
         shared_logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
 
-
     
-
 if __name__ == "__main__":
     main()

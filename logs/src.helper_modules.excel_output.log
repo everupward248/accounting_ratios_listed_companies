@@ -1,3 +1,7 @@
-2025-10-23 09:49:56,873 - src.helper_modules.excel_output - INFO - balance_sheet successfully added to excel sheet - 25
-2025-10-23 09:49:56,876 - src.helper_modules.excel_output - INFO - income_statement successfully added to excel sheet - 25
-2025-10-23 09:49:56,878 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 25
+2025-10-23 10:30:27,451 - src.helper_modules.excel_output - INFO - balance_sheet successfully added to excel sheet - 25
+2025-10-23 10:30:27,454 - src.helper_modules.excel_output - INFO - income_statement successfully added to excel sheet - 25
+2025-10-23 10:30:27,456 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 25
+2025-10-23 10:30:27,456 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
+2025-10-23 10:30:27,457 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
+2025-10-23 10:30:27,458 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
+2025-10-23 10:30:27,458 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
