@@ -72,7 +72,7 @@ def cli() -> argparse.ArgumentParser:
     parser.add_argument("-cf", "--cash_flows", type=str, help="Use this flag to obtain the cash flows data for a given listed company. Provide the company ticker.")
     parser.add_argument("-r", "--ratios", type=str, choices=["liquidity", "profitability", "gearing", "valuation", "all"], help="Use this flag to obtain the financial ratios of a selected listed company. Provide a choice which which category of ratios or all.")
     parser.add_argument("-gnt", "--get_name_ticker", type=str, choices=["name", "ticker"], help="Use this flag to obtain the legally registered company name or ticker per the ticker and company name respectively.")
-    parser.add_argument("-exp", "--export_data", type=str, help="Use this flag to export all the financials and ratio charts of the company into an excel file at the desired file PATH")
+    parser.add_argument("-exp", "--export_data", type=str, help="Use this flag to export all the financials and ratio charts of the company into an excel file at the desired file PATH. Provide the company ticker.")
     return parser
 
 if __name__ == "__main__":

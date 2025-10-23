@@ -357,7 +357,7 @@ def export_financials(ticker: str, limit: int) -> None:
         file_path = get_path()
         
         # pass the financial statements transposed to match financial statement format more closely
-        convert_to_excel(file_path, bs_df.transpose(), is_df.transpose(), cf_df.transpose())
+        convert_to_excel(file_path, bs_df.sort_values("date").transpose(), is_df.sort_values("date").transpose(), cf_df.sort_values("date").transpose())
         logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
         shared_logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
 

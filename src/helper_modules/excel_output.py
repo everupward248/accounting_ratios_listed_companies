@@ -6,7 +6,7 @@ from datetime import date
 
 logger = get_logger(__name__)
 
-def convert_to_excel(file: Path, *dfs: pd.DataFrame) -> None:
+def convert_to_excel(file: Path, *fs_dfs: pd.DataFrame) -> None:
     """
     takes the file path provided by the user and creates an excel document with all the financial data of a listed company
     
@@ -20,10 +20,10 @@ def convert_to_excel(file: Path, *dfs: pd.DataFrame) -> None:
     try:
         with pd.ExcelWriter(file / file_name) as writer:
             # iterate through all the provided dfs and use their name as the sheet name
-            for df, sheet_name in zip(dfs, sheet_names):
+            for df, sheet_name in zip(fs_dfs, sheet_names):
                 df.to_excel(writer, sheet_name=sheet_name, header=False)
-                logger.info(f"{df} successfully added to excel sheet")
-                shared_logger.info(f"{df} successfully added to excel sheet")
+                logger.info(f"{sheet_name} successfully added to excel sheet")
+                shared_logger.info(f"{sheet_name} successfully added to excel sheet")
 
             print(f"Excel output successfully created: {file_name}")
     except Exception as e:
