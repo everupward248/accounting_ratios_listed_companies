@@ -1,6 +1,7 @@
 from src.helper_modules.logger_setup import get_logger, shared_logger
 from src.helper_modules import data_requests as dr
 from src.helper_modules import cli_functions as cl
+from tabulate import tabulate
 import argparse
 import sys
 
@@ -33,17 +34,21 @@ def main() -> None:
             if "liquidity" in args.ratios:
                 # obtain the balance sheet data for the selected company and then extract the FSLI's which will be used in the liquidity ratio computations
                 limit = dr.get_period()
-                cl.liquidity(ticker, limit)
+                liquidity_ratios, cols = cl.liquidity(ticker, limit)
+                cl.pretty_print(liquidity_ratios, cols)
             elif "profitability" in args.ratios:
                 limit = dr.get_period()
-                cl.profitability(ticker, limit)
+                profitability_ratios, cols = cl.profitability(ticker, limit)
+                cl.pretty_print(profitability_ratios, cols)
             elif "gearing"  in args.ratios:
                 limit = dr.get_period()
-                cl.gearing(ticker, limit)
+                gearing_ratios, cols = cl.gearing(ticker, limit)
+                cl.pretty_print(gearing_ratios, cols)
             elif "valuation" in args.ratios:
                 # obtain the data across all financial statements to compute the ratios
                 limit = dr.get_period()
-                cl.valuation(ticker, limit)
+                valuation_ratios, cols = cl.valuation(ticker, limit)
+                cl.pretty_print(valuation_ratios, cols)
             elif "all" in args.ratios:
                 limit = dr.get_period()
                 cl.all_ratios(ticker, limit)

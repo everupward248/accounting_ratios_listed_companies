@@ -63,7 +63,7 @@ def get_cash_flows(ticker: str, limit: int) -> None:
         shared_logger.warning(f"Function returned: {df}")
 
 # functions for ratios
-def liquidity(ticker: str, limit: int) -> pd.DataFrame:
+def liquidity(ticker: str, limit: int) -> tuple[pd.DataFrame, list[str]]:
     """
     obtains the liquidity ratios for a listed company
     
@@ -86,18 +86,15 @@ def liquidity(ticker: str, limit: int) -> pd.DataFrame:
         # create a list of the ratio columns and to pass as headers to tabulate
         cols = ["fiscalYear", "date", "current_ratio", "quick_ratio", "cash_ratio"]
         liquidity_ratios = ratio_data[cols]
-        liquidity_ratios_list = liquidity_ratios.values.tolist()
-
-        print(tabulate(liquidity_ratios_list, headers=cols, tablefmt="grid"))
         logger.info(f"The liquidity ratios have been provided for {ratio_data["symbol"][0]}")
         shared_logger.info(f"The liquidity ratios have been provided for {ratio_data["symbol"][0]}")
-        return liquidity_ratios
+        return liquidity_ratios, cols
     else:
         logger.warning(f"The liquidity ratios failed, ensure valid ticker")
         shared_logger.warning(f"The liquidity ratios failed, ensure valid ticker")
         sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
 
-def profitability(ticker: str, limit: int) -> pd.DataFrame:
+def profitability(ticker: str, limit: int) -> tuple[pd.DataFrame, list[str]]:
     """
     obtains the profitability ratios for a listed company
     
@@ -148,18 +145,15 @@ def profitability(ticker: str, limit: int) -> pd.DataFrame:
         # create a list of the ratio columns and to pass as headers to tabulate
         cols = ["fiscalYear", "date", "gross_profit_margin", "operating_profit_margin", "net_profit_margin", "return_on_capital_employed", "operating_cash_flow_margin", "free_cash_flow_margin", "return_on_equity", "return_on_assets"]
         profitability_ratios = merged_df[cols]
-        profitability_ratios_list = profitability_ratios.values.tolist()
-
-        print(tabulate(profitability_ratios_list, headers=cols, tablefmt="grid"))
         logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
         shared_logger.info(f"The profitability ratios have been provided for {merged_df["symbol"][0]}")
-        return profitability_ratios
+        return profitability_ratios, cols
     else:
         logger.warning(f"The profitability ratios failed, ensure valid ticker")
         shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
         sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
 
-def gearing(ticker: str, limit: int) -> pd.DataFrame:
+def gearing(ticker: str, limit: int) -> tuple[pd.DataFrame, list[str]]:
     """
     obtains the gearing ratios for a listed company
     
@@ -180,18 +174,15 @@ def gearing(ticker: str, limit: int) -> pd.DataFrame:
         # create a list of the ratio columns and to pass as headers to tabulate
         cols = ["fiscalYear", "date", "debt_to_equity", "interest_cover", "equity_ratio", "debt_ratio"]
         gearing_ratios = merged_df[cols]
-        gearing_ratios_list = gearing_ratios.values.tolist()
-
-        print(tabulate(gearing_ratios_list, headers=cols, tablefmt="grid"))
         logger.info(f"The gearing ratios have been provided for {merged_df["symbol"][0]}")
         shared_logger.info(f"The gearing ratios have been provided for {merged_df["symbol"][0]}")
-        return gearing_ratios
+        return gearing_ratios, cols
     else:
         logger.warning(f"The profitability ratios failed, ensure valid ticker")
         shared_logger.warning(f"The profitability ratios failed, ensure valid ticker")
         sys.exit("WARNING(NO DATA RETURNED): Ensure that company ticker provided is a valid ticker of a listed company.")
 
-def valuation(ticker: str, limit: int) -> pd.DataFrame:
+def valuation(ticker: str, limit: int) -> tuple[pd.DataFrame, list[str]]:
     """
     obtain the valuation ratios for a listed company
     
@@ -262,12 +253,9 @@ def valuation(ticker: str, limit: int) -> pd.DataFrame:
             # create a list of the ratio columns and to pass as headers to tabulate
             cols = ["fiscalYear", "date", "eps", "epsDiluted", "p/e_ratio", "p/e_ratio_diluted", "close"]
             valuation_ratios = merged_df[cols]
-            valuation_ratios_list = valuation_ratios.values.tolist()
-
-            print(tabulate(valuation_ratios_list, headers=cols, tablefmt="grid"))
             logger.info(f"The valuation ratios have been provided for {merged_df["symbol"][0]}")
             shared_logger.info(f"The valuation ratios have been provided for {merged_df["symbol"][0]}")
-            return valuation_ratios
+            return valuation_ratios, cols
         else:
             logger.warning(f"The valuation ratios failed, ensure valid ticker")
             shared_logger.warning(f"The valuation ratios failed, ensure valid ticker")
@@ -285,16 +273,20 @@ def all_ratios(ticker: str, limit: int) -> None:
     """
     print("\n")
     print("Liquidity Ratios")
-    liquidity_df = liquidity(ticker, limit)
+    liquidity_df, cols = liquidity(ticker, limit)
+    pretty_print(liquidity_df, cols)
     print("\n")
     print("Profitability Ratios")
-    profitability_df = profitability(ticker, limit)
+    profitability_df, cols = profitability(ticker, limit)
+    pretty_print(profitability_df, cols)
     print("\n")
     print("Gearing Ratios")
-    gearing_df = gearing(ticker, limit)
+    gearing_df, cols = gearing(ticker, limit)
+    pretty_print(gearing_df, cols)
     print("\n")
     print("Valuation Ratios")
-    valuation_df = valuation(ticker, limit)
+    valuation_df, cols = valuation(ticker, limit)
+    pretty_print(valuation_df, cols)
  
  # some stock prices will be ommited if using only the year end financial date
 def stock_price_misses(date_miss: list, stock_prices: pd.DataFrame, df: pd.DataFrame) -> pd.DataFrame:
@@ -358,10 +350,11 @@ def export_financials(ticker: str, limit: int) -> None:
 
         try:
             # create dataframes for all the ratios
-            liquidity_ratios = liquidity(ticker, limit)
-            profitability_ratios = profitability(ticker, limit)
-            gearing_ratios = gearing(ticker, limit)
-            valuation_ratios = valuation(ticker, limit)
+            # only the ratios are required, use "-" as throwaway variable for the cols
+            liquidity_ratios, _ = liquidity(ticker, limit)
+            profitability_ratios, _ = profitability(ticker, limit)
+            gearing_ratios, _ = gearing(ticker, limit)
+            valuation_ratios, _ = valuation(ticker, limit)
 
             # store in a dictionary to pass separately from financials as these are formatted differently in the excel output
             ratio_dict = {"liquidity_ratios": liquidity_ratios,
@@ -384,6 +377,14 @@ def export_financials(ticker: str, limit: int) -> None:
         logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
         shared_logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
 
+def pretty_print(df: pd.DataFrame, cols: list[str]) -> None:
+    """
+    takes a df and a list of the names for columns and prints to terminal using tabulate
+    
+    """
+    # .tolist() used, as if the dataframe is passed directly to tabulate() the type checker will raise a warning though the function still executes without issue
+    df_list = df.values.tolist()
+    print(tabulate(df_list, headers=cols, tablefmt="grid"))
     
 if __name__ == "__main__":
     main()
