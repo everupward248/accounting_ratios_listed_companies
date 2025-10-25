@@ -1,7 +1,11 @@
-2025-10-23 11:00:30,611 - src.helper_modules.excel_output - INFO - balance_sheet successfully added to excel sheet - 25
-2025-10-23 11:00:30,613 - src.helper_modules.excel_output - INFO - income_statement successfully added to excel sheet - 25
-2025-10-23 11:00:30,615 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 25
-2025-10-23 11:00:30,616 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
-2025-10-23 11:00:30,617 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
-2025-10-23 11:00:30,618 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
-2025-10-23 11:00:30,618 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 30
+2025-10-25 11:20:22,760 - src.helper_modules.excel_output - INFO - balance_sheet successfully added to excel sheet - 28
+2025-10-25 11:20:22,762 - src.helper_modules.excel_output - INFO - income_statement successfully added to excel sheet - 28
+2025-10-25 11:20:22,764 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 28
+2025-10-25 11:20:22,765 - src.helper_modules.excel_output - INFO - liquidity_ratios successfully added to excel sheet - 33
+2025-10-25 11:20:22,766 - src.helper_modules.excel_output - INFO - profitability_ratios successfully added to excel sheet - 33
+2025-10-25 11:20:22,767 - src.helper_modules.excel_output - INFO - gearing_ratios successfully added to excel sheet - 33
+2025-10-25 11:20:22,768 - src.helper_modules.excel_output - INFO - valuation_ratios successfully added to excel sheet - 33
+2025-10-25 11:20:22,768 - src.helper_modules.excel_output - INFO - Excel output successfully created: output_2025-10-25.xlsx - 37
+2025-10-25 11:20:22,820 - src.helper_modules.excel_output - INFO - Workbook successfully loaded: C:\Users\johnj\Downloads\output_2025-10-25.xlsx - 54
+2025-10-25 11:20:22,820 - src.helper_modules.excel_output - INFO - Ratio sheets successfully parsed: [<Worksheet "liquidity_ratios">, <Worksheet "profitability_ratios">, <Worksheet "gearing_ratios">, <Worksheet "valuation_ratios">] - 61
+2025-10-25 11:20:22,821 - src.helper_modules.excel_output - INFO - Chart sheet has been added to the workbook - 76

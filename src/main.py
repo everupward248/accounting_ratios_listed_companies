@@ -1,7 +1,6 @@
 from src.helper_modules.logger_setup import get_logger, shared_logger
 from src.helper_modules import data_requests as dr
 from src.helper_modules import cli_functions as cl
-from tabulate import tabulate
 import argparse
 import sys
 

@@ -1,9 +1,9 @@
-2025-10-23 11:00:23,823 - src.helper_modules.cli_functions - INFO - The liquidity ratios have been provided for NVDA - 89
-2025-10-23 11:00:28,222 - src.helper_modules.cli_functions - INFO - The profitability ratios have been provided for NVDA - 148
-2025-10-23 11:00:29,370 - src.helper_modules.cli_functions - INFO - The gearing ratios have been provided for NVDA - 177
-2025-10-23 11:00:30,485 - src.helper_modules.cli_functions - INFO - Stock prices successfully added: ['120.07', '61.53', '19.54', '24.49'] - 214
-2025-10-23 11:00:30,485 - src.helper_modules.cli_functions - WARNING - The following dates were not obtained for the stock price: ['2021-01-31'] - 233
-2025-10-23 11:00:30,485 - src.helper_modules.cli_functions - INFO - Missing dates have been successuflly decremented and converted into date strings: [['2021-01-30', '2021-01-29', '2021-01-28']] - 315
-2025-10-23 11:00:30,500 - src.helper_modules.cli_functions - INFO - Date hit: 2021-01-29 - Close: 12.99 - 333
-2025-10-23 11:00:30,502 - src.helper_modules.cli_functions - INFO - The valuation ratios have been provided for NVDA - 256
-2025-10-23 11:00:30,653 - src.helper_modules.cli_functions - INFO - Excel output successfully created for: NVDA - 377
+2025-10-25 11:20:18,538 - src.helper_modules.cli_functions - INFO - The liquidity ratios have been provided for NVDA - 90
+2025-10-25 11:20:20,578 - src.helper_modules.cli_functions - INFO - The profitability ratios have been provided for NVDA - 150
+2025-10-25 11:20:21,643 - src.helper_modules.cli_functions - INFO - The gearing ratios have been provided for NVDA - 179
+2025-10-25 11:20:22,737 - src.helper_modules.cli_functions - INFO - Stock prices successfully added: ['120.07', '61.53', '19.54', '24.49'] - 216
+2025-10-25 11:20:22,738 - src.helper_modules.cli_functions - WARNING - The following dates were not obtained for the stock price: ['2021-01-31'] - 235
+2025-10-25 11:20:22,738 - src.helper_modules.cli_functions - INFO - Missing dates have been successuflly decremented and converted into date strings: [['2021-01-30', '2021-01-29', '2021-01-28']] - 317
+2025-10-25 11:20:22,753 - src.helper_modules.cli_functions - INFO - Date hit: 2021-01-29 - Close: 12.99 - 335
+2025-10-25 11:20:22,755 - src.helper_modules.cli_functions - INFO - The valuation ratios have been provided for NVDA - 258
+2025-10-25 11:20:22,862 - src.helper_modules.cli_functions - INFO - Excel output successfully created for: NVDA - 382

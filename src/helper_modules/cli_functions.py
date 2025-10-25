@@ -2,11 +2,12 @@ from src.helper_modules.logger_setup import get_logger, shared_logger
 from src.helper_modules import accounting_ratios as ar
 from src.helper_modules import data_requests as dr
 from src.helper_modules.file import get_path
-from src.helper_modules.excel_output import convert_to_excel
+from src.helper_modules.excel_output import convert_to_excel, write_charts
 from tabulate import tabulate
 import pandas as pd
 import datetime as dt
 import sys
+from openpyxl import load_workbook
 
 logger = get_logger(__name__)
 
@@ -105,6 +106,7 @@ def profitability(ticker: str, limit: int) -> tuple[pd.DataFrame, list[str]]:
         is_data = inc_s.copy(deep=True)
         bs_data = bs.copy(deep=True)
         cf_data = cf.copy(deep=True)
+
         # merge the financial statements on fiscal year
         # starting with the is and bs, then the cf
         merged_df = pd.merge(is_data, bs_data, on="fiscalYear", how="inner", suffixes=("", "_df2"))
@@ -368,12 +370,15 @@ def export_financials(ticker: str, limit: int) -> None:
             shared_logger.warning(e)
         
         # pass the financial statements transposed to match financial statement format more closely
-        convert_to_excel(file_path, 
+        if (excel_workbook := convert_to_excel(file_path, 
                          bs_df.sort_values("date").transpose(), 
                          is_df.sort_values("date").transpose(), 
                          cf_df.sort_values("date").transpose(),
                          **ratio_dict)
-        
+        ) is not None:
+
+            write_charts(excel_workbook)
+ 
         logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
         shared_logger.info(f"Excel output successfully created for: {bs_df["symbol"][0]}")
 
