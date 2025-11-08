@@ -8,17 +8,17 @@ from datetime import date
 
 logger = get_logger(__name__)
 
-def convert_to_excel(file: Path, *fs_dfs: pd.DataFrame, **ratio_dfs: pd.DataFrame) -> Path | None:
+def convert_to_excel(name: str, file: Path, *fs_dfs: pd.DataFrame, **ratio_dfs: pd.DataFrame) -> Path | None:
     """
     takes the file path provided by the user and creates an excel document with all the financial data of a listed company
     
     """
 
-    file_name = f"output_{date.today()}.xlsx"
+    file_name = f"output_{date.today()}_{name}.xlsx"
     file_path = file / file_name
 
     # make a list of sheet names and zip to match sheet name to financial statement
-    sheet_names = ["balance_sheet", "income_statement", "cash_flows", "liquidity_ratios"]
+    sheet_names = ["balance_sheet", "income_statement", "cash_flows"]
 
     try:
         with pd.ExcelWriter(file_path) as writer:

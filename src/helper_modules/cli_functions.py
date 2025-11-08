@@ -226,10 +226,6 @@ def valuation(ticker: str, limit: int) -> tuple[pd.DataFrame, list[str]]:
                         date_miss.append(date)
             except Exception as e:
                 print(e)
-            
-            # convert the date misses into datetimes and then decrement and retry appending from the stock list dates
-            # decrement for a range of a 3 days to ensure a hit
-            # use datetime.strptime to parse the date string according to its format and then convert to datetime, use timedelta to decrement the days
 
             if len(date_miss) > 0:
                 logger.warning(f"The following dates were not obtained for the stock price: {date_miss}")
@@ -296,6 +292,9 @@ def stock_price_misses(date_miss: list, stock_prices: pd.DataFrame, df: pd.DataF
     obtains missed stock prices by taking the most recent stock price decremented from the year end financial date
     
     """
+    # convert the date misses into datetimes and then decrement and retry appending from the stock list dates
+    # decrement for a range of a 3 days to ensure a hit
+    # use datetime.strptime to parse the date string according to its format and then convert to datetime, use timedelta to decrement the days
     date_format_string = "%Y-%m-%d"
 
     try:
@@ -351,6 +350,9 @@ def export_financials(ticker: str, limit: int) -> None:
         file_path = get_path()
 
         try:
+            # parse name from the balance sheet
+            name = bs_df["symbol"][0]
+            logger.info(f"Excel ouput started for {name}")
             # create dataframes for all the ratios
             # only the ratios are required, use "-" as throwaway variable for the cols
             liquidity_ratios, _ = liquidity(ticker, limit)
@@ -370,7 +372,7 @@ def export_financials(ticker: str, limit: int) -> None:
             shared_logger.warning(e)
         
         # pass the financial statements transposed to match financial statement format more closely
-        if (excel_workbook := convert_to_excel(file_path, 
+        if (excel_workbook := convert_to_excel(name, file_path, 
                          bs_df.sort_values("date").transpose(), 
                          is_df.sort_values("date").transpose(), 
                          cf_df.sort_values("date").transpose(),
