@@ -2,6 +2,7 @@ from src.helper_modules.logger_setup import get_logger, shared_logger
 from openpyxl import load_workbook
 from openpyxl.chart import LineChart, Reference
 from openpyxl.utils import get_column_letter
+from openpyxl.chart.layout import Layout, ManualLayout
 from pathlib import Path
 import pandas as pd 
 from datetime import date
@@ -79,11 +80,11 @@ def write_charts(workbook: Path) -> None:
     # add charts to the chart sheet
     chart_row, chart_col = 1, 1
     charts_per_row = 2
-    col_spacing = 5
-    row_spacing = 10
+    col_spacing = 10
+    row_spacing = 15
     
     for i, ws in enumerate(ratio_sheets, start=1):
-        if ws.max_row < 2:
+        if ws.max_row <= 2:
             print("Data provided is only for 1 period, therefore no charts created")
             logger.info("Data provided is only for 1 period, therefore no charts created")
             shared_logger.info("Data provided is only for 1 period, therefore no charts created")
@@ -103,8 +104,19 @@ def write_charts(workbook: Path) -> None:
             anchor_cell = f"{get_column_letter(chart_col)}{chart_row}"
 
             chart.add_data(data, titles_from_data=True)
+
+            # adjust the layout so that the axis labels and key do not overlap with data
+            chart.layout = Layout(
+                manualLayout=ManualLayout(
+                    x = .15, 
+                    y = .25,
+                    w = .75,
+                    h = .65
+                )
+            )
             chart_ws.add_chart(chart, anchor_cell)
 
+            # calculate the cell position for the next chart 
             if i % charts_per_row == 0:
                 chart_col = 1
                 chart_row += row_spacing
