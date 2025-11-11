@@ -1,0 +1,5 @@
+2025-11-10 19:57:34,616 - src.helper_modules.cli_functions - INFO - Excel ouput started for NVDA - 355
+2025-11-10 19:57:35,147 - src.helper_modules.cli_functions - INFO - The liquidity ratios have been provided for NVDA - 90
+2025-11-10 19:57:38,303 - src.helper_modules.cli_functions - INFO - The profitability ratios have been provided for NVDA - 150
+2025-11-10 19:57:39,384 - src.helper_modules.cli_functions - INFO - The gearing ratios have been provided for NVDA - 179
+2025-11-10 19:57:40,415 - src.helper_modules.cli_functions - WARNING - The valuation ratios failed, ensure valid ticker - 258

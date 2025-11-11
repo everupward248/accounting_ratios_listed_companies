@@ -3,6 +3,7 @@ from openpyxl import load_workbook
 from openpyxl.chart import LineChart, Reference
 from openpyxl.utils import get_column_letter
 from openpyxl.chart.layout import Layout, ManualLayout
+from openpyxl.chart.legend import Legend
 from pathlib import Path
 import pandas as pd 
 from datetime import date
@@ -78,10 +79,10 @@ def write_charts(workbook: Path) -> None:
     shared_logger.info("Chart sheet has been added to the workbook")
 
     # add charts to the chart sheet
-    chart_row, chart_col = 1, 1
+    chart_row, chart_col = 2, 2
     charts_per_row = 2
-    col_spacing = 10
-    row_spacing = 15
+    col_spacing = 15
+    row_spacing = 25
     
     for i, ws in enumerate(ratio_sheets, start=1):
         if ws.max_row <= 2:
@@ -106,19 +107,15 @@ def write_charts(workbook: Path) -> None:
             chart.add_data(data, titles_from_data=True)
 
             # adjust the layout so that the axis labels and key do not overlap with data
-            chart.layout = Layout(
-                manualLayout=ManualLayout(
-                    x = .15, 
-                    y = .25,
-                    w = .75,
-                    h = .65
-                )
-            )
+            chart.width = 20
+            chart.height = 15
+            chart.layout = Layout(manualLayout=ManualLayout(xMode='edge', yMode='edge', x = .1, y = .1, w = .65, h = .8))
+            
             chart_ws.add_chart(chart, anchor_cell)
 
             # calculate the cell position for the next chart 
             if i % charts_per_row == 0:
-                chart_col = 1
+                chart_col = 2
                 chart_row += row_spacing
             else:
                 chart_col += col_spacing
