@@ -1,0 +1,11 @@
+2025-11-11 22:07:24,524 - src.helper_modules.excel_output - INFO - balance_sheet successfully added to excel sheet - 29
+2025-11-11 22:07:24,527 - src.helper_modules.excel_output - INFO - income_statement successfully added to excel sheet - 29
+2025-11-11 22:07:24,529 - src.helper_modules.excel_output - INFO - cash_flows successfully added to excel sheet - 29
+2025-11-11 22:07:24,530 - src.helper_modules.excel_output - INFO - liquidity_ratios successfully added to excel sheet - 34
+2025-11-11 22:07:24,531 - src.helper_modules.excel_output - INFO - profitability_ratios successfully added to excel sheet - 34
+2025-11-11 22:07:24,532 - src.helper_modules.excel_output - INFO - gearing_ratios successfully added to excel sheet - 34
+2025-11-11 22:07:24,533 - src.helper_modules.excel_output - INFO - valuation_ratios successfully added to excel sheet - 34
+2025-11-11 22:07:24,533 - src.helper_modules.excel_output - INFO - Excel output successfully created: output_2025-11-11_NVDA.xlsx - 38
+2025-11-11 22:07:24,599 - src.helper_modules.excel_output - INFO - Workbook successfully loaded: C:\Users\johnj\Downloads\output_2025-11-11_NVDA.xlsx - 55
+2025-11-11 22:07:24,599 - src.helper_modules.excel_output - INFO - Ratio sheets successfully parsed: [<Worksheet "liquidity_ratios">, <Worksheet "profitability_ratios">, <Worksheet "gearing_ratios">, <Worksheet "valuation_ratios">] - 62
+2025-11-11 22:07:24,599 - src.helper_modules.excel_output - INFO - Chart sheet has been added to the workbook - 79

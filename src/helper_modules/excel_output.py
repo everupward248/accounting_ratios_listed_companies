@@ -3,7 +3,6 @@ from openpyxl import load_workbook
 from openpyxl.chart import LineChart, Reference
 from openpyxl.utils import get_column_letter
 from openpyxl.chart.layout import Layout, ManualLayout
-from openpyxl.chart.legend import Legend
 from pathlib import Path
 import pandas as pd 
 from datetime import date
@@ -72,8 +71,12 @@ def write_charts(workbook: Path) -> None:
     if "chart_sheet" in wb.sheetnames:
         wb.remove(wb["chart_sheet"])
         chart_ws = wb.create_sheet("chart_sheet")
+        # remove gridlines from the sheet
+        chart_ws.sheet_view.showGridLines = False
     else:
         chart_ws = wb.create_sheet("chart_sheet")
+        # remove gridlines from the sheet
+        chart_ws.sheet_view.showGridLines = False
 
     logger.info("Chart sheet has been added to the workbook")
     shared_logger.info("Chart sheet has been added to the workbook")
@@ -81,8 +84,8 @@ def write_charts(workbook: Path) -> None:
     # add charts to the chart sheet
     chart_row, chart_col = 2, 2
     charts_per_row = 2
-    col_spacing = 15
-    row_spacing = 25
+    col_spacing = 13
+    row_spacing = 31
     
     for i, ws in enumerate(ratio_sheets, start=1):
         if ws.max_row <= 2:
@@ -102,6 +105,7 @@ def write_charts(workbook: Path) -> None:
             chart.x_axis.title = "Year"
             chart.y_axis.title = "Ratios"
 
+            # get the cell to place chart dynamically
             anchor_cell = f"{get_column_letter(chart_col)}{chart_row}"
 
             chart.add_data(data, titles_from_data=True)

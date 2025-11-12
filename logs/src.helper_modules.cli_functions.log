@@ -1,5 +1,14 @@
-2025-11-10 19:57:34,616 - src.helper_modules.cli_functions - INFO - Excel ouput started for NVDA - 355
-2025-11-10 19:57:35,147 - src.helper_modules.cli_functions - INFO - The liquidity ratios have been provided for NVDA - 90
-2025-11-10 19:57:38,303 - src.helper_modules.cli_functions - INFO - The profitability ratios have been provided for NVDA - 150
-2025-11-10 19:57:39,384 - src.helper_modules.cli_functions - INFO - The gearing ratios have been provided for NVDA - 179
-2025-11-10 19:57:40,415 - src.helper_modules.cli_functions - WARNING - The valuation ratios failed, ensure valid ticker - 258
+2025-11-11 22:07:19,105 - src.helper_modules.cli_functions - INFO - Excel ouput started for NVDA - 355
+2025-11-11 22:07:19,641 - src.helper_modules.cli_functions - INFO - The liquidity ratios have been provided for NVDA - 90
+2025-11-11 22:07:22,276 - src.helper_modules.cli_functions - INFO - The profitability ratios have been provided for NVDA - 150
+2025-11-11 22:07:23,357 - src.helper_modules.cli_functions - INFO - The gearing ratios have been provided for NVDA - 179
+2025-11-11 22:07:24,473 - src.helper_modules.cli_functions - INFO - Stock prices successfully added: [] - 216
+2025-11-11 22:07:24,474 - src.helper_modules.cli_functions - WARNING - The following dates were not obtained for the stock price: ['2025-01-26', '2024-01-28', '2023-01-29', '2022-01-30', '2021-01-31'] - 231
+2025-11-11 22:07:24,474 - src.helper_modules.cli_functions - INFO - Missing dates have been successuflly decremented and converted into date strings: [['2025-01-25', '2025-01-24', '2025-01-23'], ['2024-01-27', '2024-01-26', '2024-01-25'], ['2023-01-28', '2023-01-27', '2023-01-26'], ['2022-01-29', '2022-01-28', '2022-01-27'], ['2021-01-30', '2021-01-29', '2021-01-28']] - 316
+2025-11-11 22:07:24,474 - src.helper_modules.cli_functions - INFO - Date hit: 2025-01-24 - Close: 142.62 - 334
+2025-11-11 22:07:24,478 - src.helper_modules.cli_functions - INFO - Date hit: 2024-01-26 - Close: 61.03 - 334
+2025-11-11 22:07:24,486 - src.helper_modules.cli_functions - INFO - Date hit: 2023-01-27 - Close: 20.36 - 334
+2025-11-11 22:07:24,497 - src.helper_modules.cli_functions - INFO - Date hit: 2022-01-28 - Close: 22.84 - 334
+2025-11-11 22:07:24,512 - src.helper_modules.cli_functions - INFO - Date hit: 2021-01-29 - Close: 12.99 - 334
+2025-11-11 22:07:24,515 - src.helper_modules.cli_functions - INFO - The valuation ratios have been provided for NVDA - 254
+2025-11-11 22:07:24,639 - src.helper_modules.cli_functions - INFO - Excel output successfully created for: NVDA - 384
