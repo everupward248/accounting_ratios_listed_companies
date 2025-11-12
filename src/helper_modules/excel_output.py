@@ -99,7 +99,7 @@ def write_charts(workbook: Path) -> None:
             max_row = ws.max_row
             max_col = ws.max_column
 
-            data = Reference(ws, min_col=2, max_col=max_col, min_row=1, max_row=max_row)
+            data = Reference(ws, min_col=3, max_col=max_col, min_row=1, max_row=max_row)
 
             chart.title = ws.title
             chart.x_axis.title = "Year"
